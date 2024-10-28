@@ -1,0 +1,2598 @@
+{
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "description": "FastPix Video APIs",
+      "url": "https://v1.fastpix.io"
+    }
+  ],
+  "info": {
+    "description": "Media APIs provides a set of API endpoints that enable developers to manage video and audio content on the FastPix platform. These endpoints are designed for creating, retrieving, updating, and deleting media files, as well as handling metadata and playback settings. This functionality is crucial for any video-centric product or application that serves video on demand (VOD) or audio on demand (AOD) content, allowing developers to programmatically manage their media library.\n\n#### How media APIs work \n\n\nThese endpoints allow developers to automate the process of uploading media, managing playback permissions, and customizing the user experience. With the ability to create media from URLs, upload videos directly from devices, add audio or subtitle tracks, and manage playback IDs, developers can build scalable and flexible VOD solutions. The Media APIs ensure that content is easily accessible, customizable, and ready for distribution to users.\n#### Use case scenarios\n\n**Building a video-on-demand platform:** Developers can use these APIs to manage video libraries for streaming services, allowing users to watch content on demand. \n\n**Media management for e-learning platforms:** Instructors can upload lecture videos, update content metadata, and control playback settings for students using these endpoints. \n\n**Adding multiple language tracks to videos:** \n  Developers can append additional audio or subtitle tracks to media for a global audience, providing a personalized viewing experience. \n    ",
+    "version": "1.0.0",
+    "title": "VIDEO ON DEMAND API",
+    "contact": {
+      "email": "support@fastpix.io"
+    }
+  },
+  "tags": [
+    {
+      "name": "on-demand",
+      "description": "On-demand APIs"
+    }
+  ],
+  "paths": {
+    "/on-demand": {
+      "post": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "tags": [
+          "Input video"
+        ],
+        "summary": "Create media from URL",
+        "description": "This endpoint allows developers or users to create a new video or audio media in FastPix using a publicly accessible URL. FastPix will fetch the media from the provided URL, process it, and store it on the platform for use. \n\n\n\n#### Public URL requirement:\n\n\n  The provided URL must be publicly accessible and should point to a video stored in one of the following supported formats: .m4v, .ogv, .mpeg, .mov, .3gp, .f4v, .rm, .ts, .wtv, .avi, .mp4, .wmv, .webm, .mts, .vob, .mxf, asf, m2ts \n\n \n\n#### Supported storage types:\n\nThe URL can originate from various cloud storage services or content delivery networks (CDNs) such as: \n\n\n* **Amazon S3:** URLs from Amazon's Simple Storage Service. \n\n* **Google Cloud Storage:** URLs from Google Cloud's storage solution. \n\n* **Azure Blob Storage:** URLs from Microsoft's Azure storage. \n\n* **Public CDNs:** URLs from public content delivery networks that host video files. \n\nUpon successful creation, the API returns an id that should be retained for future operations related to this media. \n \n#### How it works\n \n\n1. Send a POST request to the /media endpoint with the media URL (typically a video or audio file) and optional media settings. \n\n2. FastPix uploads the video from the provided URL to its storage. \n\n3. Receive a response containing the unique id for the newly created media item. \n\n4. Use the id in subsequent API calls, such as checking the status of the media with the **Get Media by ID** endpoint to determine when the media is ready for playback. \n\nFastPix uses webhooks to tell your application about things that happen in the background, outside of the API regular request flow. For instance, once the media file is created (but not yet processed or encoded), we’ll shoot a POST message to the address you give us with the webhook event video.media.created. \n\n\nOnce processing is done you can look for the events video.media.ready and video.media.failed to see the status of your new media file.\n\n#### Use case scenario\n \n\n* **Use case:** A developer wants to integrate a user-generated content platform where users can upload links to their videos hosted on third-party platforms like AWS or Google Cloud Storage. This endpoint is used to create media directly from those URLs. \n\n\n* **Detailed example:** \nSay you’re building an online learning platform where instructors upload video URLs hosted on their private cloud servers. By providing the video URL to this endpoint, the platform processes and adds it to your media library, ready for playback. \n",
+        "operationId": "create-media",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMediaRequest"
+              },
+              "example": {
+                "inputs": [
+                  {
+                    "type": "video",
+                    "url": "https://static.fastpix.io/sample.mp4",
+                    "startTime": 0,
+                    "endTime": 60,
+                    "introUrl": "https://static.fastpix.io/sample.mp4",
+                    "outroUrl": "https://static.fastpix.io/sample.mp4",
+                    "expungeSegments": [
+                      "4-6",
+                      "15-19"
+                    ]
+                  },
+                  {
+                    "type": "watermark",
+                    "url": "https://static.fastpix.io/watermark-4k.png",
+                    "placement": {
+                      "xAlign": "left",
+                      "xMargin": "10%",
+                      "yAlign": "top",
+                      "yMargin": "10%"
+                    },
+                    "width": "25%",
+                    "height": "25%",
+                    "opacity": "80%"
+                  },
+                  {
+                    "type": "audio",
+                    "swapTrackUrl": "https://file-examples.com/storage/fe0e9b723466913cf9611b7/2017/11/file_example_MP3_700KB.mp3",
+                    "imposeTracks": [
+                      {
+                        "url": "https://muxed.s3.amazonaws.com/example-impose-audio-track.m4a",
+                        "startTime": 0,
+                        "endTime": 5,
+                        "fadeInLevel": 1,
+                        "fadeOutLevel": 4
+                      }
+                    ]
+                  }
+                ],
+                "metadata": {
+                  "key1": "value1"
+                },
+                "subtitles": {
+                  "name": "name",
+                  "metadata": {
+                    "key1": "value1"
+                  },
+                  "languageCode": "en"
+                },
+                "accessPolicy": "public",
+                "mp4Support": "capped_4k",
+                "optimizeAudio": true,
+                "maxResolution": "1080p"
+              }
+            }
+          },
+          "description": "Request body for uploading a video media from URL"
+        },
+        "responses": {
+          "201": {
+            "description": "Media is created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true,
+                      "description": "Demonstrates whether the request is successful or not."
+                    },
+                    "data": {
+                      "description": "Displays the result of the request.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CreateMediaResponse"
+                      }
+                    }
+                  },
+                  "example": {
+                    "success": true,
+                    "data": [
+                      {
+                        "id": "iyuU4HFxhJg1vMHM2uztnJut1hIJBuNBSzJionwUV7c",
+                        "trial": true,
+                        "status": "created",
+                        "createdAt": "2023-10-20T10:50:34.594302Z",
+                        "updatedAt": "2023-10-20T10:50:34.594302Z",
+                        "playbackIds": [
+                          {
+                            "id": "6ta85f64-5717-4562-b3fc-2c963f66afa6",
+                            "accessPolicy": "public"
+                          }
+                        ],
+                        "metadata": {
+                          "key1": "value1"
+                        },
+                        "mp4Support": "capped_4k",
+                        "maxResolution": "1080p"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidPermission"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Payload Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "tags": [
+          "Manage videos"
+        ],
+        "summary": "Get list of all media",
+        "description": "This endpoint returns a list of all media files created from a URL or uploaded as file objects within your organization. Each media entry contains metadata such as the media ID, creation date, status, and type. It allows you to retrieve a comprehensive overview of your media assets, making it easier to manage and review them. \n\n\n#### How it works\n\nWhen called, the API provides a paginated response containing the media items in the organization's library. This is helpful for retrieving a large volume of media and managing content in bulk. \n\n\n\n#### Use case scenario \n\n* **Use case:** A content manager at a video-on-demand platform wants to see all uploaded media to assess the quality and status of videos. \n\n \n\n* **Detailed example:** \nYou're managing a video platform and need to check all the uploaded media in your library to ensure no outdated or low-quality content is being served. Using this endpoint, you can retrieve a complete list of media, allowing you to filter, sort, or update items as needed. \n",
+        "operationId": "list-media",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number",
+              "default": 10,
+              "minimum": 1,
+              "maximum": 50,
+              "example": 20
+            },
+            "description": "Limit specifies the maximum number of items to display per page."
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "number",
+              "default": 1,
+              "example": 1
+            },
+            "description": "Offset determines the starting point for data retrieval within a paginated list."
+          },
+          {
+            "in": "query",
+            "name": "orderBy",
+            "schema": {
+              "type": "string",
+              "example": "desc",
+              "default": "desc",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            },
+            "description": "The values in the list can be arranged in two ways: DESC (Descending) or ASC (Ascending)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of video media",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true,
+                      "description": "Demonstrates whether the request is successful or not."
+                    },
+                    "data": {
+                      "description": "Displays the result of the request.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Media"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  },
+                  "example": {
+                    "success": true,
+                    "data": [
+                      {
+                        "thumbnail": "https://images.fastpix.io/6b13fdaf-f9ac-4970-a13b-01ea417e8783/thumbnail.png",
+                        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                        "workspaceId": "5ta85f64-5717-4562-b3fc-2c963f66afa6",
+                        "metadata": {
+                          "key1": "value1"
+                        },
+                        "maxResolution": "1080p",
+                        "sourceResolution": "1080p",
+                        "status": "preparing",
+                        "playbackIds": [
+                          {
+                            "id": "6ta85f64-5717-4562-b3fc-2c963f66afa6",
+                            "accessPolicy": "public"
+                          }
+                        ],
+                        "tracks": [
+                          {
+                            "id": "9oa85f64-5717-4562-b3fc-2c963f66afa6",
+                            "type": "video",
+                            "width": 1920,
+                            "height": 1080,
+                            "frameRate": "30/1"
+                          }
+                        ],
+                        "duration": "00:00:10",
+                        "frameRate": "30/1",
+                        "aspectRatio": "16:9",
+                        "createdAt": "2023-10-20T10:50:34.594302Z",
+                        "updatedAt": "2023-10-20T10:50:34.594302Z"
+                      }
+                    ],
+                    "pagination": {
+                      "totalRecords": 100,
+                      "currentOffset": 1,
+                      "offsetCount": 10
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidPermission"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Get video media payload validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/on-demand/{mediaId}": {
+      "get": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "tags": [
+          "Manage videos"
+        ],
+        "summary": "Get a media by ID",
+        "description": "By calling this endpoint, you can retrieve detailed information about a specific media item, including its current status and a playbackId. This is particularly useful for retrieving specific media details when managing large content libraries. \n\n\n\n#### How it works \n\n\n\n1. Make a GET request to the **/media/{mediaId}** endpoint, replacing **{mediaId}** with the **uploadId** received during the upload process or the id obtained when creating media from a URL. \n \n\n2. Receive a response that includes details about the media, including: \n\n* **status:** Indicates whether the media is still “preparing” or has transitioned to \"ready.\"  \n\n* **playbackId:** The playbackId is a unique identifier that allows you to stream the media once it is ready. You can construct the stream URL dynamically using the playbackId in the following format: https://stream.fastpix.io/${playbackId}.m3u8 \n\n \n\n**Please note:** Polling this API will let you know the status that whether the upload media has been moved to ready status, so that you can get started with streaming your media. \n\n#### Use case scenario\n\n**Use case:** Suppose your platform provides users with an interface where they can manage their uploaded content. A user requests detailed information about a specific video to see if it has been fully processed and is available for playback. Using the media ID, you can fetch the information from FastPix and display it in the user’s dashboard. \n",
+        "operationId": "get-media",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mediaId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "4fa85f64-5717-4562-b3fc-2c963f66afa6"
+            },
+            "description": "The Media Id is assigned a universal unique identifier, which can contain a maximum of 255 characters."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get a video media by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true,
+                      "description": "Demonstrates whether the request is successful or not."
+                    },
+                    "data": {
+                      "description": "Displays the result of the request.",
+                      "$ref": "#/components/schemas/Media"
+                    }
+                  },
+                  "example": {
+                    "success": true,
+                    "data": {
+                      "thumbnail": "https://images.fastpix.io/6b13fdaf-f9ac-4970-a13b-01ea417e8783/thumbnail.png",
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "workspaceId": "5ta85f64-5717-4562-b3fc-2c963f66afa6",
+                      "metadata": {
+                        "key1": "value1"
+                      },
+                      "maxResolution": "1080p",
+                      "sourceResolution": "1080p",
+                      "status": "preparing",
+                      "playbackIds": [
+                        {
+                          "id": "6ta85f64-5717-4562-b3fc-2c963f66afa6",
+                          "accessPolicy": "public"
+                        }
+                      ],
+                      "tracks": [
+                        {
+                          "id": "9oa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "type": "video",
+                          "width": 1920,
+                          "height": 1080,
+                          "frameRate": "30/1"
+                        }
+                      ],
+                      "duration": "00:00:10",
+                      "frameRate": "30/1",
+                      "aspectRatio": "16:9",
+                      "createdAt": "2023-10-20T10:50:34.594302Z",
+                      "updatedAt": "2023-10-20T10:50:34.594302Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidPermission"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "media workspace relation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Payload Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "tags": [
+          "Manage videos"
+        ],
+        "summary": "Update a media by ID",
+        "description": "This endpoint allows you to update specific parameters of an existing media file. You can modify the key-value pairs of the metadata that were provided in the payload during the creation of media from a URL or when uploading the media as a file object. \n\n\n#### How it works\n\n1. Make a PATCH request to the /media/{mediaId} endpoint, replacing {mediaId} with the uploadId or the id of the media you want to update. \n\n2. Include the updated parameters in the request body. \n\n3. Receive a response containing the updated media data, confirming the changes made. \n \nOnce you have made the update request, you can also look for the webhook event **video.media.updated** to notify your system about update status. \n\n \n**Use case:** Imagine a scenario where a user uploads a video and later realizes they need to change the title, add a new description or tags. You can use this endpoint to update the media metadata without having to re-upload the entire video.\n",
+        "operationId": "updated-media",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mediaId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "4fa85f64-5717-4562-b3fc-2c963f66afa6"
+            },
+            "description": "When creating the media, FastPix assigns a universally unique identifier with a maximum length of 255 characters."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "metadata": {
+                    "type": "object",
+                    "example": {
+                      "key1": "value1"
+                    },
+                    "description": "You can search for videos with specific key value pairs using metadata, when you tag a video in \"key\" : \"value\" pairs. Dynamic Metadata allows you to define a key that allows any value pair. You can have maximum of 255 characters and upto 10 entries are allowed."
+                  }
+                },
+                "example": {
+                  "metadata": {
+                    "key1": "value1"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Media details updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true,
+                      "description": "Demonstrates whether the request is successful or not."
+                    },
+                    "data": {
+                      "description": "Displays the result of the request.",
+                      "$ref": "#/components/schemas/Media"
+                    }
+                  },
+                  "example": {
+                    "success": true,
+                    "data": {
+                      "thumbnail": "https://images.fastpix.io/6b13fdaf-f9ac-4970-a13b-01ea417e8783/thumbnail.png",
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "workspaceId": "5ta85f64-5717-4562-b3fc-2c963f66afa6",
+                      "metadata": {
+                        "key1": "value1"
+                      },
+                      "maxResolution": "1080p",
+                      "sourceResolution": "1080p",
+                      "status": "preparing",
+                      "playbackIds": [
+                        {
+                          "id": "6ta85f64-5717-4562-b3fc-2c963f66afa6",
+                          "accessPolicy": "public"
+                        }
+                      ],
+                      "tracks": [
+                        {
+                          "id": "9oa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "type": "video",
+                          "width": 1920,
+                          "height": 1080,
+                          "frameRate": "30/1"
+                        }
+                      ],
+                      "duration": "00:00:10",
+                      "frameRate": "30/1",
+                      "aspectRatio": "16:9",
+                      "createdAt": "2023-10-20T10:50:34.594302Z",
+                      "updatedAt": "2023-10-20T10:50:34.594302Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidPermission"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "media workspace relation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Payload Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "tags": [
+          "Manage videos"
+        ],
+        "summary": "Delete a media by ID",
+        "operationId": "delete-media",
+        "description": "This endpoint allows you to permanently delete a a specific video or audio media file along with all associated data. If you wish to remove a media file from FastPix storage, use this endpoint with the **mediaId** (either **uploadId** or **id**) received during the media's creation or upload. \n\n\n#### How it works\n\n\n1. Make a DELETE request to the /media/{mediaId} endpoint, replacing {mediaId} with the uploadId or the id of the media you want to delete. \n\n2. Confirm the deletion: Since this action is irreversible, ensure that you no longer need the media before proceeding. Once deleted, the media cannot be retrieved or played back. \n\n3. Webhook event to look for: **video.media.deleted** \n\n**Use case:** A user on a video-sharing platform decides to remove an old video from their profile, or suppose you're running a content moderation system, and one of the videos uploaded by a user violates your platform’s policies. Using this endpoint, the media is permanently deleted from your library, ensuring it’s no longer accessible or viewable by other users. \n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mediaId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "4fa85f64-5717-4562-b3fc-2c963f66afa6"
+            },
+            "description": "When creating the media, FastPix assigns a universally unique identifier with a maximum length of 255 characters."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete a video media",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true,
+                      "enum": [true, false],
+                      "description": "Demonstrates whether the request is successful or not."
+                    }
+                  },
+                  "example": {
+                    "success": true
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidPermission"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "media workspace relation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Payload Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/on-demand/{mediaId}/input-info": {
+      "get": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "tags": [
+          "Manage videos"
+        ],
+        "summary": "Get info of media inputs",
+        "operationId": "retrieveMediaInputInfo",
+        "description": "Allows you to retrieve detailed information about the media inputs associated with a specific media item. You can use this endpoint to verify the media file’s input URL, track creation status, and container format. The mediaId (either uploadId or id) must be provided to fetch the information. \n\n\n#### How it works\n\n\n\nUpon making a GET request with the mediaId, FastPix returns a response that includes: \n\n* **Input-url:** The URL of the uploaded media file. \n\n* **tracks:** Information about the tracks associated with the media, including both video and audio tracks, indicating whether they have been successfully created. \n\n* **containerFormat:** The format of the uploaded media file container (e.g., MP4, MKV). \n\n \n\nThis endpoint is particularly useful for ensuring that all necessary tracks (video and audio) have been correctly associated with the media during the upload or media creation process. \n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mediaId",
+            "description": "Pass the list of the input objects used to create the media, along with applied settings.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "4fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get video media input information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Demonstrates whether the request is successful or not."
+                    },
+                    "data": {
+                      "description": "Displays the result of the request.",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "settings": {
+                            "type": "object",
+                            "description": "It is a collection of objects, where each object contains information about a specific setting. ",
+                            "properties": {
+                              "url": {
+                                "type": "string",
+                                "example": "https://static.fastpix.io/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+                                "description": "The url hosts the media file for FastPix, which needs to be download to use further.  It supports formats like MP3, MP4, MOV, MKV, or TS, and includes text tracks for subtitles/CC (SRT file). While FastPix can handle various audio and video formats and codecs, using standard inputs can help with optimal processing speed."
+                              }
+                            }
+                          },
+                          "file": {
+                            "type": "object",
+                            "properties": {
+                              "containerFormat": {
+                                "type": "string",
+                                "example": "mp4",
+                                "description": "Holds different types of multimedia data in a single file. "
+                              },
+                              "tracks": {
+                                "type": "array",
+                                "items": {
+                                  "$ref": "#/components/schemas/Track"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "success": true,
+                    "data": [
+                      {
+                        "settings": {
+                          "url": "https://static.fastpix.io/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"
+                        },
+                        "file": {
+                          "containerFormat": "mp4",
+                          "tracks": [
+                            {
+                              "id": "9oa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "type": "video",
+                              "width": 1920,
+                              "height": 1080,
+                              "frameRate": "30/1"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidPermission"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Get video media input information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Payload Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/on-demand/{mediaId}/playback-ids": {
+      "post": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "tags": [
+          "Playback"
+        ],
+        "summary": "Create a playback ID",
+        "description": "You can create a new playback ID for a specific media asset. If you have already retrieved an existing playbackId using the \"Get Media by ID\" endpoint for a media asset, you can use this endpoint to generate a new playback ID with a specified access policy. \n\n\n\nIf you want to create a private playback ID for a media asset that already has a public playback ID, this endpoint also allows you to do so by specifying the desired access policy. \n\n#### How it works \n \n1. **Make a POST request** to the /on-demand/{mediaId}/playback-ids endpoint, replacing {mediaId} with the uploadId or id of the media asset. \n\n2. Include the **access policy** in the request body to indicate whether the new playback ID should be private or public. \n\n3. Receive a response containing the newly created playback ID with the requested access level. \n\n\n**Use case:** A video streaming service generates playback IDs for each media file when users request to view specific content. The playback ID is then used by the video player to stream the video. \n",
+        "operationId": "create-media-playback-id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mediaId",
+            "required": true,
+            "description": "When creating the media, FastPix assigns a universally unique identifier with a maximum length of 255 characters.",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "dbb8a39a-e4a5-4120-9f22-22f603f1446e",
+              "description": "When creating the media, FastPix assigns a universally unique identifier with a maximum length of 255 characters."
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request body for creating playback id for an media",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "accessPolicy"
+                ],
+                "properties": {
+                  "accessPolicy": {
+                    "type": "string",
+                    "example": "public",
+                    "enum": [
+                      "public",
+                      "private",
+                      "dem"
+                    ],
+                    "description": "Determines if access to the streamed content is kept private or available to all. "
+                  }
+                },
+                "example": {
+                  "accessPolicy": "public"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Playback id for an media",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true,
+                      "description": "Demonstrates whether the request is successful or not."
+                    },
+                    "data": {
+                      "description": "Displays the result of the request.",
+                      "type": "object",
+                      "properties": {
+                        "accessPolicy": {
+                          "type": "string",
+                          "example": "private",
+                          "description": "Determines if access to the streamed content is kept private or available to all."
+                        },
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "description": "When creating the media, FastPix assigns a universally unique identifier with a maximum length of 255 characters."
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "success": true,
+                    "data": {
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "accessPolicy": "public"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidPermission"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "media workspace relation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Payload Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "tags": [
+          "Playback"
+        ],
+        "summary": "Delete a playback ID",
+        "description": "This endpoint allows you to remove a specific playback ID associated with a media asset. Deleting a playbackId will revoke access to the media content linked to that ID. \n\n\n#### How it works\n\n1. Make a DELETE request to the /on-demand/{mediaId}/playback-ids endpoint, replacing {mediaId} with the uploadId or id of the media asset from which you want to delete the playback ID. \n\n2. Specify the playback ID you wish to delete in the request body. \n\n**Use case:** Your platform offers limited-time access to premium content. When the subscription expires, you can revoke access to the content by deleting the associated playback ID, preventing users from streaming the video further. \n",
+        "operationId": "delete-media-playback-id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mediaId",
+            "description": "Return the universal unique identifier for media which can contain a maximum of 255 characters. ",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "dbb8a39a-e4a5-4120-9f22-22f603f1446e",
+              "description": "When creating the media, FastPix assigns a universally unique identifier with a maximum length of 255 characters."
+            }
+          },
+          {
+            "in": "query",
+            "name": "playbackId",
+            "description": "Return the universal unique identifier for playbacks  which can contain a maximum of 255 characters. ",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dbb8a39a-e4a5-4120-9f22-22f603f1446e",
+              "format": "uuid",
+              "description": "when creating the plyabackIds, FastPix assigns a universal unique identifier with a maximum of 255 characters."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted a Playback Id successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true,
+                      "description": "Demonstrates whether the request is successful or not."
+                    }
+                  },
+                  "example": {
+                    "success": true
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidPermission"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Media/PlaybackId not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaOrPlaybackNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Payload Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/on-demand/uploads": {
+      "post": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "tags": [
+          "Input video"
+        ],
+        "summary": "Upload media from device",
+        "operationId": "direct-upload-video-media",
+        "description": "This endpoint allows you to upload a video file directly from your local device to FastPix for processing and storage. By calling this API with your preferred media settings, you will receive an uploadId and a pre-signed url in the response. \n\n\n\n#### How it works\n\n1. Send a POST request to the /uploads endpoint with optional media settings.  \n\n2. Receive a response containing the **uploadId** and a pre-signed **URL** for uploading your video file.  \n\n3. Upload your video file to the provided **URL** by making **PUT** request. The API accepts the media file from the device and uploads it to the FastPix platform. \n\n4. Once uploaded, the media undergoes processing and is assigned a unique ID for tracking. Retain this **uploadId** for any future operations related to this upload. \n\n\n\n\nAfter uploading, you can use the **Get Media by ID** endpoint to check the status of the uploaded media asset and see if it has transitioned to a \"ready\" status for playback. \n\nTo notify your application about the status of this API request check for the webhooks for Upload related events.  \n\n \n#### Use case scenario \n\n**Use case:** A social media platform lets users upload video content directly from their phones or computers. This endpoint handles the upload process. For instance, if you're building a video-sharing app where users can upload short clips from their mobile devices. Using this endpoint, users can select a video from their device, upload it to the platform, and have it processed for playback on the app. \n",
+        "requestBody": {
+          "description": "Request body for direct upload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "corsOrigin"
+                ],
+                "properties": {
+                  "corsOrigin": {
+                    "type": "string",
+                    "example": "*",
+                    "description": "Upload media directly from a device using the url name or enter '*' to allow all."
+                  },
+                  "pushMediaSettings": {
+                    "$ref": "#/components/schemas/DirectUploadrequest"
+                  }
+                },
+                "example": {
+                  "corsOrigin": "*",
+                  "pushMediaSettings": {
+                    "accessPolicy": "private",
+                    "startTime": 0,
+                    "endTime": 60,
+                    "metadata": {
+                      "key1": "value1"
+                    },
+                    "subtitles": {
+                      "name": "name",
+                      "metadata": {
+                        "key1": "value1"
+                      },
+                      "languageCode": "en"
+                    },
+                    "optimizeAudio": true,
+                    "maxResolution": "1080p"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Direct upload created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true,
+                      "description": "Demonstrates whether the request is successful or not."
+                    },
+                    "data": {
+                      "description": "Displays the result of the request.",
+                      "$ref": "#/components/schemas/DirectUpload"
+                    }
+                  },
+                  "example": {
+                    "success": true,
+                    "data": {
+                      "uploadId": "fbc58354-9c9d-4c0b-bcc8-dc27a021278b",
+                      "status": "waiting",
+                      "url": "https://play.min.io/uploads/75a547a0-163c-4f7e-a2d9-3c9a796389c0/fbc58354-9c9d-4c0b-bcc8-dc27a021278b?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=Q3AM3UQ867SPQQA43P2F%2F20240517%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240517T103738Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=ac3a16c75fba94198f12bb16670bb224f156a9ac03ba23f1ed8ed8a9a707d48a",
+                      "timeout": 14400,
+                      "corsOrigin": "*",
+                      "pushMediaSettings": {
+                        "playbackIds": [
+                          {
+                            "accessPolicy": "private"
+                          }
+                        ],
+                        "metadata": {
+                          "key1": "value1"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidPermission"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Payload Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "- Username : Access token id\n- Password : Secret key\n"
+      }
+    },
+    "schemas": {
+      "Media": {
+        "type": "object",
+        "properties": {
+          "thumbnail": {
+            "type": "string",
+            "example": "https://images.fastpix.io/6b13fdaf-f9ac-4970-a13b-01ea417e8783/thumbnail.png",
+            "description": "A video thumbnail is a still image that acts as the preview image for your video."
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "description": "When creating the media, FastPix assigns a universally unique identifier with a maximum length of 255 characters."
+          },
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "5ta85f64-5717-4562-b3fc-2c963f66afa6",
+            "description": "A unique identifier is generated by FastPix for the workspace."
+          },
+          "metadata": {
+            "type": "object",
+            "example": {
+              "key1": "value1"
+            },
+            "description": "You can search for videos with specific key value pairs using metadata, when you tag a video in \"key\" : \"value\" pairs. Dynamic Metadata allows you to define a key that allows any value pair. You can have maximum of 255 characters and upto 10 entries are allowed."
+          },
+          "maxResolution": {
+            "type": "string",
+            "example": "1080p",
+            "default": "1080p",
+            "enum": [
+              "2160p",
+              "1440p",
+              "1080p",
+              "720p",
+              "480p",
+              "360p"
+            ],
+            "description": "The maximum resolution tier determines the highest quality your media will be available in."
+          },
+          "sourceResolution": {
+            "type": "string",
+            "example": "1080p",
+            "default": "1080p",
+            "enum": [
+              "2160p",
+              "1440p",
+              "1080p",
+              "720p",
+              "480p",
+              "360p"
+            ],
+            "description": "The maximum resolution tier determines the highest quality your media will be available in."
+          },
+          "status": {
+            "type": "string",
+            "example": "preparing",
+            "enum": [
+              "preparing",
+              "ready",
+              "failed",
+              "created"
+            ],
+            "description": "Determines the media's status, which can be one of the possible values."
+          },
+          "playbackIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlaybackId"
+            },
+            "description": "A collection of Playback ID objects utilized for crafting HLS playback URLs."
+          },
+          "tracks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Track"
+            },
+            "description": "A media consists of different media tracks, like video, audio, and sometimes text, all combined."
+          },
+          "duration": {
+            "type": "number",
+            "example": "00:00:10",
+            "description": "The time span of the media, measured in seconds with a maximum allowable duration of 12 hours per individual media."
+          },
+          "frameRate": {
+            "type": "string",
+            "example": "30/1",
+            "description": "Frame rate quantifies the speed at which frames are displayed per second. It represents the range of frames available for a specific track. If the frame rate of the input file is indeterminable, it will be indicated by a value of -1."
+          },
+          "aspectRatio": {
+            "type": "string",
+            "example": "16:9",
+            "description": "The aspect ratio of a video is a value that describes the relative shape of a video based on its width and height."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-10-20T10:50:34.594Z",
+            "description": "Time the media was created, defined as a localDateTime (UTC Time)."
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-10-20T10:50:34.594Z",
+            "description": "Time the media was updated, defined as a localDateTime (UTC Time)."
+          }
+        }
+      },
+      "Track": {
+        "type": "object",
+        "description": "A media consists of different media tracks, like video, audio, and sometimes text, all combined.",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "9oa85f64-5717-4562-b3fc-2c963f66afa6",
+            "description": "FastPix generates a unique identifier for each track."
+          },
+          "type": {
+            "type": "string",
+            "example": {
+              "availableValue": "video",
+              "possibleValue": "video, audio, text"
+            },
+            "description": "Defines the type of input. This option is mandatory."
+          },
+          "width": {
+            "type": "number",
+            "example": 1920,
+            "description": "Track width denotes the range of widths applicable to a specific track. Currently, this setting can be modified only for video tracks"
+          },
+          "height": {
+            "type": "number",
+            "example": 1080,
+            "description": "Track height denotes the range of height applicable to a specific track. Currently, this setting can be modified only for video tracks."
+          },
+          "frameRate": {
+            "type": "number",
+            "example": "30/1",
+            "description": "Frame rate quantifies the speed at which frames are displayed per second. It represents the range of frames available for a specific track. If the frame rate of the input file is indeterminable, it will be indicated by a value of -1."
+          }
+        },
+        "example": {
+          "tracks": [
+            {
+              "id": "9oa85f64-5717-4562-b3fc-2c963f66afa6",
+              "type": "video",
+              "width": 1920,
+              "height": 1080,
+              "frameRate": "30/1"
+            }
+          ]
+        }
+      },
+      "CreateTrackResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": {
+              "availableValue": "5ta85f64-5717-4562-b3fc-2c963f66afa6"
+            },
+            "description": "When creating the upload, FastPix assigns a universally unique identifier with a maximum length of 255 characters."
+          },
+          "type": {
+            "type": "string",
+            "example": "audio",
+            "enum": [
+              "audio",
+              "subtitle"
+            ],
+            "description": "The type of media track added - audio or subtitle."
+          },
+          "languageCode": {
+            "type": "string",
+            "example": "en",
+            "enum": [
+              "en",
+              "it",
+              "pl",
+              "es",
+              "fr",
+              "ru",
+              "nl"
+            ],
+            "description": "Language codes are concise, standardized symbols that denote languages, utilizing either two or three characters for identification. The language code must be compliant with the BCP 47 standard to ensure compatibility (for text only)."
+          },
+          "languageName": {
+            "type": "string",
+            "example": "English",
+            "description": "Name of the language in which the subtitles will be generated (For text only)."
+          },
+          "metadata": {
+            "type": "object",
+            "example": {
+              "key1": "value1"
+            },
+            "description": "You can search for videos with specific key value pairs using metadata, when you tag a video in \"key\" : \"value\" pairs. Dynamic Metadata allows you to define a key that allows any value pair. You can have maximum of 255 characters and upto 10 entries are allowed."
+          },
+          "closedCaptions": {
+            "type": "boolean",
+            "example": true,
+            "enum": [true, false],
+            "description": "A closed caption is a text version of spoken dialogue (subtitle) and sounds in a video, aiding those who are deaf or hard of hearing. (text only)"
+          }
+        },
+        "example": {
+          "id": "5ta85f64-5717-4562-b3fc-2c963f66afa6",
+          "type": "audio",
+          "languageCode": "en",
+          "languageName": "James Bond",
+          "metadata": {
+            "key1": "value1"
+          },
+          "closedCaptions": false
+        }
+      },
+      "CreateTrackRequest": {
+        "type": "object",
+        "required": [
+          "url",
+          "type",
+          "languageCode",
+          "languageName"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "example": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.vtt",
+            "description": "The URL of the audio or subtitle track to be added to the existing media."
+          },
+          "type": {
+            "type": "string",
+            "example": "audio",
+            "enum": [
+              "audio",
+              "subtitle"
+            ],
+            "description": "The type of media track added - audio or subtitle."
+          },
+          "languageCode": {
+            "type": "string",
+            "example": "en",
+            "enum": [
+              "en",
+              "it",
+              "pl",
+              "es",
+              "fr",
+              "ru",
+              "nl"
+            ],
+            "description": "Language codes are concise, standardized symbols that denote languages, utilizing either two or three characters for identification. The language code must be compliant with the BCP 47 standard to ensure compatibility (for text only)."
+          },
+          "languageName": {
+            "type": "string",
+            "example": "English",
+            "description": "Name of the language in which the subtitles will be generated (For text only)."
+          },
+          "metadata": {
+            "type": "object",
+            "example": {
+              "key1": "value1"
+            },
+            "description": "You can search for videos with specific key value pairs using metadata, when you tag a video in \"key\" : \"value\" pairs. Dynamic Metadata allows you to define a key that allows any value pair. You can have maximum of 255 characters and upto 10 entries are allowed."
+          },
+          "closedCaptions": {
+            "type": "boolean",
+            "example": true,
+            "enum": [true, false],
+            "description": "A closed caption is a text version of spoken dialogue (subtitle) and sounds in a video, aiding those who are deaf or hard of hearing. (text only)"
+          }
+        }
+      },
+      "EncodingResponse": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1cb90b64-5717-4562-b3fc-2c963f66afa6",
+            "description": "A unique identifier is generated by FastPix for the workspace."
+          },
+          "consumedData": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "integer",
+                  "example": "2024-05-01T00:00:00.000Z"
+                },
+                "minutesEncoded": {
+                  "type": "integer",
+                  "example": 14
+                }
+              }
+            }
+          }
+        }
+      },
+      "PlaybackId": {
+        "type": "object",
+        "description": "A collection of Playback ID objects utilized for crafting HLS playback urls.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "6ta85f64-5717-4562-b3fc-2c963f66afa6",
+            "description": "A unique identifier is generated by FastPix for the playbacks."
+          },
+          "accessPolicy": {
+            "type": "string",
+            "example": "public",
+            "enum": [
+              "public",
+              "private",
+              "drm"
+            ],
+            "description": "Determines if access to the streamed content is kept private or available to all. "
+          }
+        }
+      },
+      "CreateMediaRequest": {
+        "required": [
+          "playbackPolicy",
+          "accessPolicy",
+          "inputs"
+        ],
+        "properties": {
+          "inputs": {
+            "type": "array",
+            "description": "The Input will consist of url, startTime, endTime, type, languageCode, name, and closedCaption.\n",
+            "items": {
+              "type": "object",
+              "required": [
+                "url",
+                "type"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "video",
+                  "description": "Defines the type of input. This option is mandatory. Possible values are Video, audio, text, and watermark.\n"
+                },
+                "url": {
+                  "type": "string",
+                  "example": "https://static.fastpix.io/sample.mp4",
+                  "description": "The url hosts the media file for FastPix, which needs to be downloaded to use further. It supports formats like MP3, MP4, MOV, MKV, or TS, and includes text tracks for subtitles/CC (SRT file). While FastPix can handle various audio and video formats and codecs, using standard inputs can help with optimal processing speed.\n"
+                },
+                "startTime": {
+                  "type": "number",
+                  "example": "0",
+                  "description": "Start time indicates where encoding should begin within the video file. For example, if you want to encode a segment from 3 minutes (180 seconds) to 6 minutes (360 seconds) in a 10-minute (600 seconds) video, the start time is 3 minutes (180 seconds). Note: Start time is always mentioned in seconds.\n"
+                },
+                "endTime": {
+                  "type": "number",
+                  "example": "60",
+                  "description": "End time indicates where encoding should end within the video file. For example, if you want to encode a segment from 3 minutes (180 seconds) to 6 minutes (360 seconds) in a 10-minute (600 seconds) video, the end time is 6 minutes (360 seconds). Note: End time is always mentioned in seconds.\n"
+                },
+                "introUrl": {
+                  "type": "string",
+                  "example": "https://static.fastpix.io/sample.mp4",
+                  "description": "The url of the intro video which is to be added at the start of the video.\n"
+                },
+                "outroUrl": {
+                  "type": "string",
+                  "example": "https://static.fastpix.io/sample.mp4",
+                  "description": "The url of the outro video which is to be added at the end of the video.\n"
+                },
+                "expungeSegments": {
+                  "type": "array",
+                  "description": "The list of the startTime-endTime of the segments to be removed from the actual video.\n",
+                  "items": {
+                    "type": "string",
+                    "example": "4-6"
+                  },
+                  "example": [
+                    "4-6",
+                    "15-19"
+                  ]
+                },
+                "watermark": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "watermark"
+                      ],
+                      "description": "Type of overlay (currently only supports 'watermark').",
+                      "example": "watermark"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "URL of the watermark image.",
+                      "example": "https://static.fastpix.io/watermark-4k.png"
+                    },
+                    "placement": {
+                      "type": "object",
+                      "properties": {
+                        "xAlign": {
+                          "type": "string",
+                          "enum": [
+                            "left",
+                            "center",
+                            "right"
+                          ],
+                          "description": "Horizontal alignment of the watermark.",
+                          "example": "left"
+                        },
+                        "xMargin": {
+                          "type": "string",
+                          "description": "Horizontal margin from the edge of the video.",
+                          "example": "10%"
+                        },
+                        "yAlign": {
+                          "type": "string",
+                          "enum": [
+                            "top",
+                            "middle",
+                            "bottom"
+                          ],
+                          "description": "Vertical alignment of the watermark.",
+                          "example": "top"
+                        },
+                        "yMargin": {
+                          "type": "string",
+                          "description": "Vertical margin from the edge of the video.",
+                          "example": "10%"
+                        }
+                      }
+                    },
+                    "width": {
+                      "type": "string",
+                      "description": "Width of the watermark in percentage or pixels.",
+                      "example": "25%"
+                    },
+                    "height": {
+                      "type": "string",
+                      "description": "Height of the watermark in percentage or pixels.",
+                      "example": "25%"
+                    },
+                    "opacity": {
+                      "type": "string",
+                      "description": "Opacity of the watermark in percentage.",
+                      "example": "80%"
+                    }
+                  }
+                },
+                "audio": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "audio"
+                      ],
+                      "description": "Type of overlay (currently only supports 'audio').",
+                      "example": "audio"
+                    },
+                    "swapTrackUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "URL of the audio track to replace the existing audio in the video.",
+                      "example": "https://file-examples.com/storage/fe0e9b723466913cf9611b7/2017/11/file_example_MP3_700KB.mp3"
+                    },
+                    "imposeTracks": {
+                      "type": "array",
+                      "description": "List of additional audio tracks to overlay on the video.",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL of the audio track to impose on the video.",
+                            "example": "https://muxed.s3.amazonaws.com/example-impose-audio-track.m4a"
+                          },
+                          "startTime": {
+                            "type": "integer",
+                            "description": "Start time (in seconds) of the imposed audio in the video.",
+                            "example": 0
+                          },
+                          "endTime": {
+                            "type": "integer",
+                            "description": "End time (in seconds) of the imposed audio in the video.",
+                            "example": 5
+                          },
+                          "fadeInLevel": {
+                            "type": "integer",
+                            "description": "Level of fade-in effect (in seconds) at the start of the imposed audio.",
+                            "example": 1
+                          },
+                          "fadeOutLevel": {
+                            "type": "integer",
+                            "description": "Level of fade-out effect (in seconds) at the end of the imposed audio.",
+                            "example": 4
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "example": {
+              "key1": "value1"
+            },
+            "description": "You can search for videos with specific key-value pairs using metadata, when you tag a video in \"key\" : \"value\" pairs. Dynamic Metadata allows you to define a key that allows any value pair. You can have a maximum of 255 characters and up to 10 entries are allowed.\n"
+          },
+          "subtitle": {
+            "type": "object",
+            "description": "Generates subtitle files for audio/video files.\n",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "english",
+                "description": "Name of the language in which the subtitles will be generated.\n"
+              },
+              "metadata": {
+                "type": "object",
+                "example": {
+                  "key1": "value1"
+                },
+                "description": "You can search for videos with specific key-value pairs using metadata, when you tag a video in \"key\" : \"value\" pairs. Dynamic Metadata allows you to define a key that allows any value pair. You can have a maximum of 255 characters and up to 10 entries are allowed.\n"
+              },
+              "languageCode": {
+                "type": "string",
+                "example": "en",
+                "enum": [
+                  "en",
+                  "it",
+                  "pl",
+                  "es",
+                  "fr",
+                  "ru",
+                  "nl"
+                ],
+                "description": "Language codes are concise, standardized symbols that denote languages, utilizing either two or three characters for identification. The language code must be compliant with the BCP 47 standard to ensure compatibility. (for text only).\n"
+              }
+            }
+          },
+          "accessPolicy": {
+            "type": "string",
+            "example": "public",
+            "enum": [
+              "public",
+              "private",
+              "drm"
+            ],
+            "description": "Determines whether access to the streamed content is kept private or available to all.\n"
+          },
+          "mp4Support": {
+            "type": "string",
+            "example": "capped_4k",
+            "enum": [
+              "capped_4k",
+              "audioOnly",
+              "audioOnly,capped_4k"
+            ],
+            "description": "“capped_4k\": Generates an mp4 video file up to 4k resolution \"audioOnly\": Generates an m4a audio file of the media file \"audioOnly,capped_4k\": Generates both video and audio media files for offline viewing\n"
+          },
+          "optimizeAudio": {
+            "type": "boolean",
+            "default": false,
+            "example": true,
+            "enum": [true, false],
+            "description": "normalize volume of the audio track. This is available for pre-recorded content only. \n"
+          },
+          "maxResolution": {
+            "type": "string",
+            "example": "1080p",
+            "default": "1080p",
+            "enum": [
+              "2160p",
+              "1440p",
+              "1080p",
+              "720p",
+              "480p",
+              "360p"
+            ],
+            "description": "The maximum resolution tier determines the highest quality your media will be available in.\n"
+          }
+        },
+        "example": {
+          "inputs": [
+            {
+              "type": "video",
+              "url": "https://static.fastpix.io/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+              "startTime": 0,
+              "endTime": 60
+            },
+            {
+              "type": "watermark",
+              "url": "https://static.fastpix.io/watermark-4k.png",
+              "placement": {
+                "xAlign": "left",
+                "xMargin": "10%",
+                "yAlign": "top",
+                "yMargin": "10%"
+              }
+            }
+          ],
+          "metadata": {
+            "key1": "value1"
+          },
+          "subtitles": {
+            "name": "name",
+            "metadata": {
+              "key1": "value1"
+            },
+            "languageCode": "en"
+          },
+          "accessPolicy": "public",
+          "mp4Support": "capped_4k",
+          "optimizeAudio": true,
+          "maxResolution": "1080p"
+        }
+      },
+      "CreateMediaResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "iyuU4HFxhJg1vMHM2uztnJut1hIJBuNBSzJionwUV7c",
+            "description": "The Media is assigned a universal unique identifier, which can contain a maximum of 255 characters."
+          },
+          "trial": {
+            "type": "boolean",
+            "default": true,
+            "example": true,
+            "enum": [true, false],
+            "description": "FastPix allows for a free trial. Create as many media files as you like during the trial period. Remember, each clip can only be 10 seconds long and will be deleted after 24 hours. Also, all trial content will have the FastPix logo watermark.\n"
+          },
+          "status": {
+            "type": "string",
+            "example": "preparing",
+            "enum": [
+              "preparing",
+              "ready",
+              "failed",
+              "created"
+            ],
+            "description": "Determines the media's status, which can be one of the possible values."
+          },
+          "createdAt": {
+            "type": "number",
+            "example": "2023-10-20T10:50:34.594Z",
+            "description": "Time the media was created, defined as a localDateTime (UTC Time)."
+          },
+          "updatedAt": {
+            "type": "number",
+            "example": "2023-10-20T10:50:34.594Z",
+            "description": "Time the media was updated, defined as a localDateTime (UTC Time)."
+          },
+          "playbackIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlaybackId"
+            },
+            "description": "A collection of Playback ID objects utilized for crafting HLS playback URLs."
+          },
+          "metadata": {
+            "type": "object",
+            "example": {
+              "key1": "value1"
+            },
+            "description": "You can search for videos with specific key value pairs using metadata, when you tag a video in \"key\" : \"value\" pairs. Dynamic Metadata allows you to define a key that allows any value pair. You can have maximum of 255 characters and upto 10 entries are allowed."
+          },
+          "maxResolution": {
+            "type": "string",
+            "example": "1080p",
+            "default": "1080p",
+            "enum": [
+              "2160p",
+              "1440p",
+              "1080p",
+              "720p",
+              "480p",
+              "360p"
+            ],
+            "description": "The maximum resolution tier determines the highest quality your media will be available in."
+          }
+        }
+      },
+      "patchSourceAccessRequest": {
+        "properties": {
+          "sourceAccess": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "example": {
+          "sourceAccess": true
+        }
+      },
+      "CreateSubtitleRequest": {
+        "required": [
+          "name",
+          "metadata",
+          "languageCode"
+        ],
+        "properties": {
+          "createSubtitle": {
+            "type": "object",
+            "description": "Generates subtitle files for audio/video files.",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "english",
+                "description": "Name of the language in which the subtitles will be generated."
+              },
+              "metadata": {
+                "type": "object",
+                "example": {
+                  "key1": "value1"
+                },
+                "description": "You can search for videos with specific key value pairs using metadata, when you tag a video in \"key\" : \"value\" pairs. Dynamic Metadata allows you to define a key that allows any value pair. You can have maximum of 255 characters and upto 10 entries are allowed."
+              },
+              "languageCode": {
+                "type": "string",
+                "example": {
+                  "availableValue": "en",
+                  "possibleValue": "en, it, pl, es, fr, ru, nl"
+                },
+                "description": "Language codes are concise, standardized symbols that denote languages, utilizing either two or three characters for identification. The language code must be compliant with the BCP 47 standard to ensure compatibility. (for text only)."
+              }
+            }
+          }
+        }
+      },
+      "CreateSubtitleResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "description": "When creating the media, FastPix assigns a universally unique identifier with a maximum length of 255 characters."
+          },
+          "status": {
+            "type": "string",
+            "example": {
+              "possibleValue": "waiting"
+            },
+            "description": "Determines the media's status, which can be one of the possible values."
+          },
+          "name": {
+            "type": "string",
+            "example": "english",
+            "description": "Name of the language in which the subtitles will be generated."
+          },
+          "metadata": {
+            "type": "object",
+            "example": {
+              "key1": "value1"
+            },
+            "description": "You can search for videos with specific key value pairs using metadata, when you tag a video in \"key\" : \"value\" pairs. Dynamic Metadata allows you to define a key that allows any value pair. You can have maximum of 255 characters and upto 10 entries are allowed."
+          },
+          "languageCode": {
+            "type": "string",
+            "example": {
+              "availableValue": "en",
+              "possibleValue": "en, it, pl, es, fr, ru, nl"
+            },
+            "description": "Language codes are concise, standardized symbols that denote languages, utilizing either two or three characters for identification. The language code must be compliant with the BCP 47 standard to ensure compatibility. (for text only)."
+          }
+        },
+        "example": {
+          "id": "5ta85f64-5717-4562-b3fc-2c963f66afa6",
+          "status": "preparing",
+          "name": "English",
+          "metadata": {
+            "key1": "value1"
+          },
+          "languageCode": "en"
+        }
+      },
+      "DirectUploadrequest": {
+        "required": [
+          "accessPolicy"
+        ],
+        "properties": {
+          "accessPolicy": {
+            "type": "string",
+            "example": "public",
+            "enum": [
+              "public",
+              "private"
+            ],
+            "description": "Determines if access to the streamed content is kept private or available to all."
+          },
+          "startTime": {
+            "type": "number",
+            "example": "0",
+            "description": "Start time indicates where encoding should begin within the video file. For example, if you want to encode a segment from 3 minutes (180 seconds)  to 6 minutes (360 seconds) in a 10-minute (600 seconds) video, the start time is 3 minutes (180 seconds). Note: Start time is always mentioned in seconds."
+          },
+          "endTime": {
+            "type": "number",
+            "example": "60",
+            "description": "End time indicates where encoding should end within the video file. For example, if you want to encode a segment from 3 minutes (180 seconds)  to 6 minutes (360 seconds) in a 10-minute (600 seconds) video the end time is 6 minutes (360 seconds). Note: End time is always mentioned in seconds."
+          },
+          "inputs": {
+            "type": "array",
+            "description": "The Input will consist of url, startTime, endTime, type, languageCode, name and closedCaption.",
+            "required": [
+              "url"
+            ],
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "video",
+                  "description": "Defines the type of input. This option is mandatory. Possible values are Video, audio, text, and watermark."
+                },
+                "url": {
+                  "type": "string",
+                  "example": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                  "description": "The url hosts the media file for FastPix, which needs to be download to use further.  It supports formats like MP3, MP4, MOV, MKV, or TS, and includes text tracks for subtitles/CC (SRT file). While FastPix can handle various audio and video formats and codecs, using standard inputs can help with optimal processing speed."
+                },
+                "startTime": {
+                  "type": "number",
+                  "example": "0",
+                  "description": "Start time indicates where encoding should begin within the video file. For example, if you want to encode a segment from 3 minutes (180 seconds)  to 6 minutes (360 seconds) in a 10-minute (600 seconds) video, the start time is 3 minutes (180 seconds). Note: Start time is always mentioned in seconds."
+                },
+                "endTime": {
+                  "type": "number",
+                  "example": "60",
+                  "description": "End time indicates where encoding should end within the video file. For example, if you want to encode a segment from 3 minutes (180 seconds)  to 6 minutes (360 seconds) in a 10-minute (600 seconds) video the end time is 6 minutes (360 seconds). Note: End time is always mentioned in seconds."
+                },
+                "languageCode": {
+                  "type": "string",
+                  "example": "en",
+                  "enum": [
+                    "en",
+                    "it",
+                    "pl",
+                    "es",
+                    "fr",
+                    "ru",
+                    "nl"
+                  ],
+                  "description": "Language codes are concise, standardized symbols that denote languages, utilizing either two or three characters for identification. The language code must be compliant with the BCP 47 standard to ensure compatibility (for text only)."
+                },
+                "languageName": {
+                  "type": "string",
+                  "example": "English",
+                  "description": "Name of the track. (for text only)"
+                },
+                "closedCaptions": {
+                  "type": "boolean",
+                  "example": true,
+                  "enum": [true, false],
+                  "description": "A closed caption is a text version of spoken dialogue (subtitle) and sounds in a video, aiding those who are deaf or hard of hearing. (text only)"
+                },
+                "placement": {
+                  "type": "object",
+                  "description": "Defines the positioning of the watermark, such as top, middle or bottom.",
+                  "properties": {
+                    "xAlign": {
+                      "type": "string",
+                      "example": "top",
+                      "enum": [
+                        "top",
+                        "middle",
+                        "bottom"
+                      ],
+                      "description": "Displays the horizontal positioning of the watermark"
+                    },
+                    "xMargin": {
+                      "type": "string",
+                      "example": {
+                        "availableValue": "10px or 10%"
+                      },
+                      "description": "The horizontal distance between the starting point of vertical alignment and the closest edge of the image/video"
+                    },
+                    "yAlign": {
+                      "type": "string",
+                      "example": "left",
+                      "enum": [
+                        "left",
+                        "right",
+                        "centre"
+                      ],
+                      "description": "Displays the vertical positioning of the watermark. "
+                    },
+                    "yMargin": {
+                      "type": "string",
+                      "example": "10px or 10%",
+                      "description": "The vertical distance between the starting point of vertical alignment and the closest edge of the image/video. "
+                    }
+                  }
+                },
+                "width": {
+                  "type": "string",
+                  "example": "10px or 10%",
+                  "description": "The width of the watermark. "
+                },
+                "height": {
+                  "type": "string",
+                  "example": "10px or 10%",
+                  "description": "The height of the watermark."
+                },
+                "opacity": {
+                  "type": "string",
+                  "example": "50%",
+                  "minimum": 0,
+                  "maximum": 200,
+                  "description": "To enhance transparency of the watermark, adjust the opacity level. "
+                }
+              }
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "example": {
+              "key1": "value1"
+            },
+            "description": "You can search for videos with specific key value pairs using metadata, when you tag a video in \"key\" : \"value\" pairs. Dynamic Metadata allows you to define a key that allows any value pair. You can have maximum of 255 characters and upto 10 entries are allowed."
+          },
+          "createSubtitle": {
+            "type": "object",
+            "description": "Generates subtitle files for audio/video files.",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "english",
+                "description": "Name of the language in which the subtitles will be generated."
+              },
+              "metadata": {
+                "type": "object",
+                "example": {
+                  "key1": "value1"
+                },
+                "description": "You can search for videos with specific key value pairs using metadata, when you tag a video in \"key\" : \"value\" pairs. Dynamic Metadata allows you to define a key that allows any value pair. You can have maximum of 255 characters and upto 10 entries are allowed."
+              },
+              "languageCode": {
+                "type": "string",
+                "example": "en",
+                "enum": [
+                  "en",
+                  "it",
+                  "pl",
+                  "es",
+                  "fr",
+                  "ru",
+                  "nl"
+                ],
+                "description": "Language codes are concise, standardized symbols that denote languages, utilizing either two or three characters for identification. The language code must be compliant with the BCP 47 standard to ensure compatibility. (for text only)."
+              }
+            }
+          },
+          "optimizeAudio": {
+            "type": "boolean",
+            "default": true,
+            "example": true,
+            "enum": [true, false],
+            "description": "Enhance the quality and volume of the audio track. This is available for pre-recorded content only. "
+          },
+          "maxResolution": {
+            "type": "string",
+            "example": "1080p",
+            "default": "1080p",
+            "enum": [
+              "2160p",
+              "1440p",
+              "1080p",
+              "720p",
+              "480p",
+              "360p"
+            ],
+            "description": "The maximum resolution tier determines the highest quality your media will be available in."
+          },
+          "mp4Support": {
+            "type": "string",
+            "example": "capped_4k",
+            "enum": [
+              "capped_4k",
+              "audioOnly",
+              "audioOnly,capped_4k"
+            ],
+            "description": "Generates an mp4 video file up to 4k resolution: “capped_4k\" Generates an m4a audio file of the media file. :\"audioOnly\" Generates both video and audio media files for offline viewing: \"audioOnly,capped_4k\""
+          }
+        }
+      },
+      "DirectUpload": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "5ta85f64-5717-4562-b3fc-2c963f66afa6",
+            "description": "When creating the upload, FastPix assigns a universally unique identifier with a maximum length of 255 characters."
+          },
+          "mediaId": {
+            "type": "string",
+            "example": "7ya85f64-5717-4562-b3fc-2c963f66afa6",
+            "description": "When creating the media, FastPix assigns a universally unique identifier with a maximum length of 255 characters."
+          },
+          "status": {
+            "type": "string",
+            "example": "waiting",
+            "description": "Determines the media's status, which can be one of the possible values."
+          },
+          "url": {
+            "type": "string",
+            "example": {
+              "url": "https://storage.fastpix.net/uploads/08256f2c-efca-4c4f-8f21-75e40d49f225/80911756-1ce3-485a-a3b4-6653ff0937a1?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=media-svc%2F20240111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240111T123116Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=419ab443cdc1d4a22cf1b0f8875855590b346058e6d3859f7c1c9da3bb061f91"
+            },
+            "description": "The url hosts the media file for FastPix, which needs to be download to use further.  It supports formats like MP3, MP4, MOV, MKV, or TS, and includes text tracks for subtitles/CC (SRT file). While FastPix can handle various audio and video formats and codecs, using standard inputs can help with optimal processing speed."
+          },
+          "timeout": {
+            "type": "number",
+            "example": 14400,
+            "default": 14400,
+            "description": "The duration set for the validity of the upload URL. If the upload isn't completed within this timeframe, it's marked as timed out.\n"
+          },
+          "corsOrigin": {
+            "type": "string",
+            "example": "*",
+            "description": "Upload media directly from a device using the url name or enter '*' to allow all."
+          },
+          "pushMediaSettings": {
+            "$ref": "#/components/schemas/DirectUploadResponse"
+          }
+        }
+      },
+      "OrganizationNotFoundError": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true,
+            "enum": [true, false],
+            "description": "Demonstrates whether the request is successful or not."
+          },
+          "error": {
+            "type": "object",
+            "description": "Displays details about the reasons behind the request's failure.",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "example": 404,
+                "description": "Displays the error code indicating the type of the error."
+              },
+              "message": {
+                "type": "string",
+                "example": "Organization Not Found"
+              }
+            }
+          }
+        }
+      },
+      "DirectUploadResponse": {
+        "properties": {
+          "playbackIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlaybackId"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "example": {
+              "key1": "value1"
+            },
+            "description": "You can search for videos with specific key value pairs using metadata, when you tag a video in \"key\" : \"value\" pairs. Dynamic Metadata allows you to define a key that allows any value pair. You can have maximum of 255 characters and upto 10 entries are allowed."
+          }
+        }
+      },
+      "BadRequest": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false,
+            "description": "Demonstrates whether the request is successful or not."
+          },
+          "error": {
+            "type": "object",
+            "description": "Displays details about the reasons behind the request's failure.",
+            "properties": {
+              "code": {
+                "type": "number",
+                "example": 400,
+                "description": "Displays the error code indicating the type of the error."
+              },
+              "message": {
+                "type": "string",
+                "example": "Bad Request",
+                "description": "A descriptive message providing more details for the error."
+              }
+            }
+          }
+        },
+        "example": {
+          "success": false,
+          "error": {
+            "code": 400,
+            "message": "Upgrade to remove all restrictions video deletion after 24 hours"
+          }
+        }
+      },
+      "MediaNotFound": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Demonstrates whether the request is successful or not."
+          },
+          "error": {
+            "type": "object",
+            "description": "Displays details about the reasons behind the request's failure.",
+            "properties": {
+              "code": {
+                "type": "number",
+                "example": 404,
+                "description": "Displays the error code indicating the type of the error."
+              },
+              "message": {
+                "type": "string",
+                "example": "media workspace relation not found",
+                "description": "A descriptive message providing more details for the error."
+              }
+            }
+          }
+        },
+        "example": {
+          "success": false,
+          "error": {
+            "code": 404,
+            "message": "media workspace relation not found"
+          }
+        }
+      },
+      "InvalidPermission": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Demonstrates whether the request is successful or not."
+          },
+          "error": {
+            "type": "object",
+            "description": "Displays details about the reasons behind the request's failure.",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "example": 401,
+                "description": "Displays the error code indicating the type of the error."
+              },
+              "message": {
+                "type": "string",
+                "example": "Unauthorized",
+                "description": "A descriptive message providing more details for the error."
+              }
+            }
+          }
+        },
+        "example": {
+          "success": false,
+          "error": {
+            "code": 401,
+            "message": "Unauthorized"
+          }
+        }
+      },
+      "Forbidden": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Demonstrates whether the request is successful or not."
+          },
+          "error": {
+            "type": "object",
+            "description": "Displays details about the reasons behind the request's failure.",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "example": 403,
+                "description": "Displays the error code indicating the type of the error."
+              },
+              "message": {
+                "type": "string",
+                "example": "forbidden",
+                "description": "A descriptive message providing more details for the error."
+              }
+            }
+          }
+        },
+        "example": {
+          "success": false,
+          "error": {
+            "code": 403,
+            "message": "forbidden"
+          }
+        }
+      },
+      "MediaOrPlaybackNotFound": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Demonstrates whether the request is successful or not."
+          },
+          "error": {
+            "type": "object",
+            "description": "Displays details about the reasons behind the request's failure.",
+            "properties": {
+              "code": {
+                "type": "number",
+                "example": 404,
+                "description": "Displays the error code indicating the type of the error."
+              },
+              "message": {
+                "type": "string",
+                "example": "Media/PlaybackId not Found",
+                "description": "A descriptive message providing more details for the error."
+              }
+            }
+          }
+        },
+        "example": {
+          "success": false,
+          "error": {
+            "code": 404,
+            "message": "Media/PlaybackId not Found"
+          }
+        }
+      },
+      "MediaOrTrackNotFound": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Demonstrates whether the request is successful or not."
+          },
+          "error": {
+            "type": "object",
+            "description": "Displays details about the reasons behind the request's failure.",
+            "properties": {
+              "code": {
+                "type": "number",
+                "example": 404,
+                "description": "Displays the error code indicating the type of the error."
+              },
+              "message": {
+                "type": "string",
+                "example": "Media or Track Not Found",
+                "description": "A descriptive message providing more details for the error."
+              }
+            }
+          }
+        },
+        "example": {
+          "success": false,
+          "error": {
+            "code": 404,
+            "message": "media workspace relation Not Found"
+          }
+        }
+      },
+      "ValidationErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": null,
+            "description": "Demonstrates whether the request is successful or not."
+          },
+          "error": {
+            "type": "object",
+            "description": "Displays details about the reasons behind the request's failure.",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "example": 422,
+                "description": "Displays the error code indicating the type of the error."
+              },
+              "message": {
+                "type": "string",
+                "example": "payload validation failed",
+                "description": "A descriptive message providing more details for the error."
+              },
+              "fields": {
+                "type": "array",
+                "description": "It is an collection of objects, where each object contains information about a specific field and a corresponding error message.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string",
+                      "example": "fieldName",
+                      "description": "Displays the specific field associated with the error."
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "must not be null",
+                      "description": "A descriptive message providing more details for the error."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "example": {
+          "success": false,
+          "error": {
+            "code": 422,
+            "message": "payload validation failed",
+            "fields": [
+              {
+                "field": "fieldName",
+                "message": "must not be null"
+              }
+            ]
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "description": "Pagination organizes content into pages for better readability and navigation.",
+        "properties": {
+          "totalRecords": {
+            "type": "integer",
+            "example": 100,
+            "description": "It gives the total number of media assets that are accessible overall."
+          },
+          "currentOffset": {
+            "type": "integer",
+            "example": 1,
+            "description": "Offset determines the current point for data retrieval within a paginated list. "
+          },
+          "offsetCount": {
+            "type": "integer",
+            "example": 10,
+            "description": "The offset count is expressed as total records by limit.\n\n    \n    \n    \n    \n    \n    "
+          }
+        }
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": false
+  }
+}
