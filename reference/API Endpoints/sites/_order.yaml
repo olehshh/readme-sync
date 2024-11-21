@@ -1,0 +1,9 @@
+- sitescreate
+- siteslist
+- sitesget
+- sitesupdate
+- sitesdelete
+- sitesrestore
+- sitesreadinesscheck
+- sitesactivate
+- sitesdeactivate
