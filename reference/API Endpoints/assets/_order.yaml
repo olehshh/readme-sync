@@ -1,0 +1,9 @@
+- assetscreate
+- assetslist
+- assetsget
+- assetsupdate
+- assetsdelete
+- assetsrestore
+- assetsreadinesscheck
+- assetsactivate
+- assetsdeactivate
