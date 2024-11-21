@@ -15,6 +15,7 @@
 - sitesget
 - sitesupdate
 - sitesdelete
+- sitesdeactivate
 - sitesrestore
 - sitesreadinesscheck
 - sitesactivate
