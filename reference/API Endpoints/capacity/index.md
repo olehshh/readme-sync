@@ -1,4 +1,0 @@
----
-title: capacity
-hidden: false
----
