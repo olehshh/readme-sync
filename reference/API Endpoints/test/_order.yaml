@@ -16,6 +16,7 @@
 - sitesupdate
 - sitesdelete
 - sitesdeactivate
+- assetscreate
 - sitesrestore
 - sitesreadinesscheck
 - sitesactivate
