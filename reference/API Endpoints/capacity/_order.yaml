@@ -1,1 +1,4 @@
-[]
+- capacitygetavailable
+- capacitypostavailable
+- capacitygetallocated
+- capacitypostallocated
