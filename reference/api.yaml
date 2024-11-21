@@ -1,0 +1,44 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  version: 1.0.0
+
+paths:
+  /endpoint1:
+    get:
+      summary: "Get data from endpoint1"
+      responses:
+        '200':
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Data from endpoint1"
+
+  /endpoint2:
+    post:
+      summary: "Post data to endpoint2"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: string
+                  example: "Example data"
+      responses:
+        '201':
+          description: "Data created successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Data created successfully"
