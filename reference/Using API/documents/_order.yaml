@@ -1,0 +1,5 @@
+- createadocument
+- getadocument
+- updateadocument
+- removeadocument
+- recogniseadocument
