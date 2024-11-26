@@ -1,0 +1,5 @@
+- createindividualbankingentity
+- createbusinessbankingentity
+- getbankingentity
+- updatebankingentity
+- putacknowledgementsconsents
