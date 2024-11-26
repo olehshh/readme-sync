@@ -1,9 +1,4 @@
 components:
-  examples: {}
-  headers: {}
-  parameters: {}
-  requestBodies: {}
-  responses: {}
   schemas:
     ReturnType_typeofbankingEntityResponseSchema.parse_:
       properties:
@@ -199,7 +194,7 @@ components:
       type: object
       description: Obtain the return type of a function type
     BankingEntityResponse:
-      $ref: "#/components/schemas/ReturnType_typeofbankingEntityResponseSchema.parse_"
+      $ref: '#/components/schemas/ReturnType_typeofbankingEntityResponseSchema.parse_'
     Partial_any_:
       properties: {}
       type: object
@@ -209,7 +204,8 @@ components:
       type: object
       description: From T, pick a set of properties whose keys are in the union K
     PublicEntityConfig:
-      $ref: "#/components/schemas/Pick_EntityConfigItem.-or-configId-or-configuration-or-dateCreated-or-dateUpdated-or-updatedBy-or-entityAccountId_"
+      $ref: >-
+        #/components/schemas/Pick_EntityConfigItem.-or-configId-or-configuration-or-dateCreated-or-dateUpdated-or-updatedBy-or-entityAccountId_
     ReturnType_typeofpatchEntityConfigValidator.parse_:
       anyOf:
         - properties:
@@ -239,7 +235,7 @@ components:
           type: object
       description: Obtain the return type of a function type
     PatchEntityConfig:
-      $ref: "#/components/schemas/ReturnType_typeofpatchEntityConfigValidator.parse_"
+      $ref: '#/components/schemas/ReturnType_typeofpatchEntityConfigValidator.parse_'
     MFAControllerBodyParams:
       properties:
         mfaId:
@@ -426,7 +422,8 @@ components:
       type: object
       description: Obtain the return type of a function type
     KybApplicationB2CResponse:
-      $ref: "#/components/schemas/ReturnType_typeofkybApplicationB2CResponseSchema.parse_"
+      $ref: >-
+        #/components/schemas/ReturnType_typeofkybApplicationB2CResponseSchema.parse_
     KybApplicationStatus:
       type: string
       enum:
@@ -512,7 +509,7 @@ components:
           type: string
         roles:
           items:
-            $ref: "#/components/schemas/OrgRoles"
+            $ref: '#/components/schemas/OrgRoles'
           type: array
         percentOwned:
           type: number
@@ -549,7 +546,7 @@ components:
       type: object
       additionalProperties: false
     OwnershipNode:
-      $ref: "#/components/schemas/IndividualOwnershipNode"
+      $ref: '#/components/schemas/IndividualOwnershipNode'
     KycRequirementCondition:
       type: string
       enum:
@@ -571,12 +568,12 @@ components:
       properties:
         candidates:
           items:
-            $ref: "#/components/schemas/KycRequirementCandidate"
+            $ref: '#/components/schemas/KycRequirementCandidate'
           type: array
         condition:
-          $ref: "#/components/schemas/KycRequirementCondition"
+          $ref: '#/components/schemas/KycRequirementCondition'
         role:
-          $ref: "#/components/schemas/OrgRoles"
+          $ref: '#/components/schemas/OrgRoles'
       required:
         - candidates
         - condition
@@ -599,7 +596,7 @@ components:
             - entityStructureDoc
           nullable: false
         status:
-          $ref: "#/components/schemas/BaseCustomerTaskStatus"
+          $ref: '#/components/schemas/BaseCustomerTaskStatus'
       required:
         - message
         - taskType
@@ -613,10 +610,10 @@ components:
         - TRUST_UNIT_HOLDERS_REGISTER
     UploadDocTask:
       allOf:
-        - $ref: "#/components/schemas/BaseCustomerTask_entityStructureDoc_"
+        - $ref: '#/components/schemas/BaseCustomerTask_entityStructureDoc_'
         - properties:
             docType:
-              $ref: "#/components/schemas/UploadDocTaskDocType"
+              $ref: '#/components/schemas/UploadDocTaskDocType'
           required:
             - docType
           type: object
@@ -630,7 +627,7 @@ components:
             - collectVerifyBeneficiaryProfile
           nullable: false
         status:
-          $ref: "#/components/schemas/BaseCustomerTaskStatus"
+          $ref: '#/components/schemas/BaseCustomerTaskStatus'
       required:
         - message
         - taskType
@@ -646,7 +643,7 @@ components:
             - collectVerifySettlorProfile
           nullable: false
         status:
-          $ref: "#/components/schemas/BaseCustomerTaskStatus"
+          $ref: '#/components/schemas/BaseCustomerTaskStatus'
       required:
         - message
         - taskType
@@ -654,12 +651,13 @@ components:
       type: object
     CollectVerifyTask:
       anyOf:
-        - $ref: "#/components/schemas/BaseCustomerTask_collectVerifyBeneficiaryProfile_"
-        - $ref: "#/components/schemas/BaseCustomerTask_collectVerifySettlorProfile_"
+        - $ref: >-
+            #/components/schemas/BaseCustomerTask_collectVerifyBeneficiaryProfile_
+        - $ref: '#/components/schemas/BaseCustomerTask_collectVerifySettlorProfile_'
     CustomerTask:
       anyOf:
-        - $ref: "#/components/schemas/UploadDocTask"
-        - $ref: "#/components/schemas/CollectVerifyTask"
+        - $ref: '#/components/schemas/UploadDocTask'
+        - $ref: '#/components/schemas/CollectVerifyTask'
     IndividualNonKycProfile:
       properties:
         name:
@@ -710,8 +708,8 @@ components:
       type: object
     NonKycProfile:
       anyOf:
-        - $ref: "#/components/schemas/IndividualNonKycProfile"
-        - $ref: "#/components/schemas/EntityNonKycProfile"
+        - $ref: '#/components/schemas/IndividualNonKycProfile'
+        - $ref: '#/components/schemas/EntityNonKycProfile'
     SettlorResponses:
       type: string
       enum:
@@ -723,13 +721,13 @@ components:
         settlor:
           properties:
             settlorProfile:
-              $ref: "#/components/schemas/NonKycProfile"
+              $ref: '#/components/schemas/NonKycProfile'
             settlorPrecheckResponse:
-              $ref: "#/components/schemas/SettlorResponses"
+              $ref: '#/components/schemas/SettlorResponses'
           type: object
         beneficiaries:
           items:
-            $ref: "#/components/schemas/NonKycProfile"
+            $ref: '#/components/schemas/NonKycProfile'
           type: array
       type: object
     KybApplicationPublic:
@@ -742,7 +740,7 @@ components:
           allOf:
             - properties:
                 status:
-                  $ref: "#/components/schemas/KybApplicationStatus"
+                  $ref: '#/components/schemas/KybApplicationStatus'
               required:
                 - status
               type: object
@@ -751,7 +749,7 @@ components:
                   type: string
               type: object
         state:
-          $ref: "#/components/schemas/KybState"
+          $ref: '#/components/schemas/KybState'
         registeredName:
           type: string
         abn:
@@ -772,9 +770,9 @@ components:
             - TRT
             - FUT
         registeredOffice:
-          $ref: "#/components/schemas/KybAddress_basic"
+          $ref: '#/components/schemas/KybAddress_basic'
         placeOfBusiness:
-          $ref: "#/components/schemas/KybAddress_basic"
+          $ref: '#/components/schemas/KybAddress_basic'
         emailAddress:
           type: string
         phoneNumber:
@@ -805,13 +803,13 @@ components:
           type: string
         orgStructure:
           items:
-            $ref: "#/components/schemas/OwnershipNode"
+            $ref: '#/components/schemas/OwnershipNode'
           type: array
         australianTaxResident:
           type: boolean
         kycRequirements:
           items:
-            $ref: "#/components/schemas/KycRequirement"
+            $ref: '#/components/schemas/KycRequirement'
           type: array
         businessNames:
           items:
@@ -825,7 +823,7 @@ components:
           type: string
         customerTasks:
           items:
-            $ref: "#/components/schemas/CustomerTask"
+            $ref: '#/components/schemas/CustomerTask'
           type: array
         documents:
           items:
@@ -837,7 +835,7 @@ components:
             type: object
           type: array
         entitySpecificData:
-          $ref: "#/components/schemas/EntitySpecificData"
+          $ref: '#/components/schemas/EntitySpecificData'
         nfeStatus:
           type: string
           enum:
@@ -926,9 +924,9 @@ components:
         acn:
           type: string
         registeredOffice:
-          $ref: "#/components/schemas/Address_basic"
+          $ref: '#/components/schemas/Address_basic'
         placeOfBusiness:
-          $ref: "#/components/schemas/Address_basic"
+          $ref: '#/components/schemas/Address_basic'
         emailAddress:
           type: string
         phoneNumber:
@@ -996,9 +994,9 @@ components:
         arbn:
           type: string
         placeOfBusiness:
-          $ref: "#/components/schemas/KybAddress_basic"
+          $ref: '#/components/schemas/KybAddress_basic'
         registeredOffice:
-          $ref: "#/components/schemas/KybAddress_basic"
+          $ref: '#/components/schemas/KybAddress_basic'
         emailAddress:
           type: string
         phoneNumber:
@@ -1027,7 +1025,7 @@ components:
           allOf:
             - properties:
                 status:
-                  $ref: "#/components/schemas/KybApplicationStatus"
+                  $ref: '#/components/schemas/KybApplicationStatus'
               required:
                 - status
               type: object
@@ -1042,7 +1040,7 @@ components:
         countryOfEstablishment:
           type: string
         entitySpecificData:
-          $ref: "#/components/schemas/EntitySpecificData"
+          $ref: '#/components/schemas/EntitySpecificData'
         nfeQuestionBusinessType:
           type: string
           enum:
@@ -1185,7 +1183,8 @@ components:
       type: object
       description: Obtain the return type of a function type
     KycApplicationB2CResponse:
-      $ref: "#/components/schemas/ReturnType_typeofkycApplicationB2CResponseSchema.parse_"
+      $ref: >-
+        #/components/schemas/ReturnType_typeofkycApplicationB2CResponseSchema.parse_
     Partial_KycApplicationPublicMutableFields_:
       properties: {}
       type: object
@@ -1203,7 +1202,8 @@ components:
       type: object
       description: Obtain the return type of a function type
     IdentityDocumentB2CResponse:
-      $ref: "#/components/schemas/ReturnType_typeofidentityDocumentB2CResponseSchema.parse_"
+      $ref: >-
+        #/components/schemas/ReturnType_typeofidentityDocumentB2CResponseSchema.parse_
     ReturnType_typeofidentityDocument.parse_:
       anyOf:
         - properties:
@@ -1271,12 +1271,12 @@ components:
           type: object
       description: Obtain the return type of a function type
     IdentityDocumentFields:
-      $ref: "#/components/schemas/ReturnType_typeofidentityDocument.parse_"
+      $ref: '#/components/schemas/ReturnType_typeofidentityDocument.parse_'
     ReturnType_typeofemailValidator.parse_:
       type: string
       description: Obtain the return type of a function type
     Email:
-      $ref: "#/components/schemas/ReturnType_typeofemailValidator.parse_"
+      $ref: '#/components/schemas/ReturnType_typeofemailValidator.parse_'
     ReturnType_typeofidvSdkTokenB2CResponseSchema.parse_:
       properties:
         token:
@@ -1284,7 +1284,8 @@ components:
       type: object
       description: Obtain the return type of a function type
     IdvSdkTokenB2CResponse:
-      $ref: "#/components/schemas/ReturnType_typeofidvSdkTokenB2CResponseSchema.parse_"
+      $ref: >-
+        #/components/schemas/ReturnType_typeofidvSdkTokenB2CResponseSchema.parse_
     ReturnType_typeofgenerateF1OneSdkTokenRequestSchema.parse_:
       properties:
         entityId:
@@ -1292,7 +1293,8 @@ components:
       type: object
       description: Obtain the return type of a function type
     GenerateF1OneSdkTokenRequestSchema:
-      $ref: "#/components/schemas/ReturnType_typeofgenerateF1OneSdkTokenRequestSchema.parse_"
+      $ref: >-
+        #/components/schemas/ReturnType_typeofgenerateF1OneSdkTokenRequestSchema.parse_
     MFAScope:
       enum:
         - payee:add
@@ -1349,13 +1351,13 @@ components:
             splitNzFloorLevel:
               type: string
               enum:
-                - "0"
-                - "1"
+                - '0'
+                - '1'
             prioritizedSort:
               type: string
               enum:
-                - "0"
-                - "1"
+                - '0'
+                - '1'
             baseSource:
               type: string
               enum:
@@ -1364,8 +1366,8 @@ components:
             exposePhantom:
               type: string
               enum:
-                - "0"
-                - "1"
+                - '0'
+                - '1'
             addressTypeFilter:
               type: string
             positionFilter:
@@ -1373,18 +1375,18 @@ components:
             groupAddresses:
               type: string
               enum:
-                - "0"
-                - "1"
+                - '0'
+                - '1'
             suppressLot:
               type: string
               enum:
-                - "0"
-                - "1"
+                - '0'
+                - '1'
             displayGnafLot:
               type: string
               enum:
-                - "0"
-                - "1"
+                - '0'
+                - '1'
             caseType:
               type: string
             singleLineHitNumber:
@@ -1414,13 +1416,13 @@ components:
             suppressLot:
               type: string
               enum:
-                - "0"
-                - "1"
+                - '0'
+                - '1'
             displayGnafLot:
               type: string
               enum:
-                - "0"
-                - "1"
+                - '0'
+                - '1'
             caseType:
               type: string
               enum:
@@ -1437,7 +1439,8 @@ components:
       type: object
       description: From T, pick a set of properties whose keys are in the union K
     Omit_F1LookUpResponseCommand.type_:
-      $ref: "#/components/schemas/Pick_F1LookUpResponseCommand.Exclude_keyofF1LookUpResponseCommand.type__"
+      $ref: >-
+        #/components/schemas/Pick_F1LookUpResponseCommand.Exclude_keyofF1LookUpResponseCommand.type__
       description: Construct a type with the properties of T except for those in type K.
     ABREntityType:
       type: string
@@ -1589,11 +1592,11 @@ components:
         - TTT
     F1LookUpReport:
       allOf:
-        - $ref: "#/components/schemas/Omit_F1LookUpResponseCommand.type_"
+        - $ref: '#/components/schemas/Omit_F1LookUpResponseCommand.type_'
         - properties:
             type:
               allOf:
-                - $ref: "#/components/schemas/ABREntityType"
+                - $ref: '#/components/schemas/ABREntityType'
               nullable: true
           required:
             - type
@@ -1612,7 +1615,8 @@ components:
       type: object
       description: Obtain the return type of a function type
     OnboardingRefDataOccupationB2CResponse:
-      $ref: "#/components/schemas/ReturnType_typeofrefDataOccupationB2CResponseSchema.parse_"
+      $ref: >-
+        #/components/schemas/ReturnType_typeofrefDataOccupationB2CResponseSchema.parse_
     ReturnType_typeofrefDataIndustryB2CResponseSchema.parse_:
       properties:
         industry:
@@ -1633,7 +1637,8 @@ components:
       type: object
       description: Obtain the return type of a function type
     OnboardingRefDataIndustryB2CResponse:
-      $ref: "#/components/schemas/ReturnType_typeofrefDataIndustryB2CResponseSchema.parse_"
+      $ref: >-
+        #/components/schemas/ReturnType_typeofrefDataIndustryB2CResponseSchema.parse_
     ReturnType_typeofrefDataSourceOfFundB2CResponseSchema.parse_:
       properties:
         sourceOfFund:
@@ -1648,7 +1653,8 @@ components:
       type: object
       description: Obtain the return type of a function type
     OnboardingRefDataSourceOfFundB2CResponse:
-      $ref: "#/components/schemas/ReturnType_typeofrefDataSourceOfFundB2CResponseSchema.parse_"
+      $ref: >-
+        #/components/schemas/ReturnType_typeofrefDataSourceOfFundB2CResponseSchema.parse_
     ReturnType_typeofrefDataPurposeOfAccountB2CResponseSchema.parse_:
       properties:
         purposeOfAccount:
@@ -1663,7 +1669,8 @@ components:
       type: object
       description: Obtain the return type of a function type
     OnboardingRefDataPurposeOfAccountB2CResponse:
-      $ref: "#/components/schemas/ReturnType_typeofrefDataPurposeOfAccountB2CResponseSchema.parse_"
+      $ref: >-
+        #/components/schemas/ReturnType_typeofrefDataPurposeOfAccountB2CResponseSchema.parse_
     Partial_Record_UserConsentType.boolean__:
       properties: {}
       type: object
@@ -1675,7 +1682,8 @@ components:
       description: |-
         Stringified UUIDv4.
         See [RFC 4112](https://tools.ietf.org/html/rfc4122)
-      pattern: "[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}"
+      pattern: >-
+        [0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}
     Pick_NonNullable_UserRecord_.-or-currentEntityAccountId-or-devicesMap-or-email-or-firstname-or-lastname-or-mailingAddress-or-mobileNumber-or-nickname-or-notifications-or-residentialAddress-or-userId-or-username-or-verified-or-kycStatus_:
       properties:
         nickname: {}
@@ -1695,7 +1703,8 @@ components:
       type: object
       description: From T, pick a set of properties whose keys are in the union K
     PublicUser:
-      $ref: "#/components/schemas/Pick_NonNullable_UserRecord_.-or-currentEntityAccountId-or-devicesMap-or-email-or-firstname-or-lastname-or-mailingAddress-or-mobileNumber-or-nickname-or-notifications-or-residentialAddress-or-userId-or-username-or-verified-or-kycStatus_"
+      $ref: >-
+        #/components/schemas/Pick_NonNullable_UserRecord_.-or-currentEntityAccountId-or-devicesMap-or-email-or-firstname-or-lastname-or-mailingAddress-or-mobileNumber-or-nickname-or-notifications-or-residentialAddress-or-userId-or-username-or-verified-or-kycStatus_
     Pick_NonNullable_UserRecord_.customerNumber_:
       properties:
         customerNumber: {}
@@ -1703,8 +1712,8 @@ components:
       description: From T, pick a set of properties whose keys are in the union K
     PublicOwnUser:
       allOf:
-        - $ref: "#/components/schemas/PublicUser"
-        - $ref: "#/components/schemas/Pick_NonNullable_UserRecord_.customerNumber_"
+        - $ref: '#/components/schemas/PublicUser'
+        - $ref: '#/components/schemas/Pick_NonNullable_UserRecord_.customerNumber_'
     Record_string.PublicUserEntityMap_:
       properties: {}
       type: object
@@ -1742,7 +1751,7 @@ components:
       type: object
       description: Obtain the return type of a function type
     Address:
-      $ref: "#/components/schemas/ReturnType_typeofaddressValidator.parse_"
+      $ref: '#/components/schemas/ReturnType_typeofaddressValidator.parse_'
     ReturnType_typeofmarketingOptionValidator.parse_:
       properties:
         application:
@@ -1754,11 +1763,11 @@ components:
       type: object
       description: Obtain the return type of a function type
     MarketingOption:
-      $ref: "#/components/schemas/ReturnType_typeofmarketingOptionValidator.parse_"
+      $ref: '#/components/schemas/ReturnType_typeofmarketingOptionValidator.parse_'
     MarketingOptionRequest:
       properties:
         marketing:
-          $ref: "#/components/schemas/MarketingOption"
+          $ref: '#/components/schemas/MarketingOption'
       required:
         - marketing
       type: object
@@ -1772,7 +1781,7 @@ components:
         Destination:
           type: string
         DeliveryMedium:
-          $ref: "#/components/schemas/DeliveryMediumType"
+          $ref: '#/components/schemas/DeliveryMediumType'
         AttributeName:
           type: string
       type: object
@@ -1849,13 +1858,13 @@ components:
       type: object
       description: Obtain the return type of a function type
     DeviceInfoB2CResponse:
-      $ref: "#/components/schemas/ReturnType_typeofdevicePublicInfoSchema.parse_"
+      $ref: '#/components/schemas/ReturnType_typeofdevicePublicInfoSchema.parse_'
     Pick_ProcessedSubscriptionEntity.accountNumber-or-accountId-or-bsb-or-productVersion-or-entityAccountId-or-nickname-or-productGroup_:
       properties:
         nickname:
           type: string
         entityAccountId:
-          $ref: "#/components/schemas/UUID"
+          $ref: '#/components/schemas/UUID'
         productVersion:
           type: string
         productGroup:
@@ -1868,7 +1877,7 @@ components:
         accountNumber:
           type: string
         accountId:
-          $ref: "#/components/schemas/UUID"
+          $ref: '#/components/schemas/UUID'
         bsb:
           type: string
       required:
@@ -1898,7 +1907,8 @@ components:
       additionalProperties: false
     AccountV2:
       allOf:
-        - $ref: "#/components/schemas/Pick_ProcessedSubscriptionEntity.accountNumber-or-accountId-or-bsb-or-productVersion-or-entityAccountId-or-nickname-or-productGroup_"
+        - $ref: >-
+            #/components/schemas/Pick_ProcessedSubscriptionEntity.accountNumber-or-accountId-or-bsb-or-productVersion-or-entityAccountId-or-nickname-or-productGroup_
         - properties:
             accountState:
               type: string
@@ -1917,9 +1927,9 @@ components:
             balances:
               properties:
                 available:
-                  $ref: "#/components/schemas/ProcessedBalanceV2"
+                  $ref: '#/components/schemas/ProcessedBalanceV2'
                 booked:
-                  $ref: "#/components/schemas/ProcessedBalanceV2"
+                  $ref: '#/components/schemas/ProcessedBalanceV2'
               required:
                 - available
                 - booked
@@ -1933,7 +1943,7 @@ components:
       properties:
         accounts:
           items:
-            $ref: "#/components/schemas/AccountV2"
+            $ref: '#/components/schemas/AccountV2'
           type: array
       required:
         - accounts
@@ -2040,7 +2050,8 @@ components:
       type: object
       description: From T, pick a set of properties whose keys are in the union K
     Omit_TenXCardSummary.cardId_:
-      $ref: "#/components/schemas/Pick_TenXCardSummary.Exclude_keyofTenXCardSummary.cardId__"
+      $ref: >-
+        #/components/schemas/Pick_TenXCardSummary.Exclude_keyofTenXCardSummary.cardId__
       description: Construct a type with the properties of T except for those in type K.
     File:
       properties:
@@ -2062,7 +2073,7 @@ components:
           type: string
         files:
           items:
-            $ref: "#/components/schemas/File"
+            $ref: '#/components/schemas/File'
           type: array
         name:
           type: string
@@ -2204,7 +2215,7 @@ components:
     CurrencyWithCode:
       properties:
         currencyCode:
-          $ref: "#/components/schemas/CURRENCY"
+          $ref: '#/components/schemas/CURRENCY'
       required:
         - currencyCode
       type: object
@@ -2222,15 +2233,15 @@ components:
           type: string
         documents:
           items:
-            $ref: "#/components/schemas/Document"
+            $ref: '#/components/schemas/Document'
           type: array
         currency:
-          $ref: "#/components/schemas/CurrencyWithCode"
+          $ref: '#/components/schemas/CurrencyWithCode'
         productId:
           type: string
         cards:
           items:
-            $ref: "#/components/schemas/Omit_TenXCardSummary.cardId_"
+            $ref: '#/components/schemas/Omit_TenXCardSummary.cardId_'
           type: array
       required:
         - version
@@ -2274,7 +2285,7 @@ components:
       properties:
         products:
           items:
-            $ref: "#/components/schemas/ProductV2"
+            $ref: '#/components/schemas/ProductV2'
           type: array
       required:
         - products
@@ -2294,7 +2305,9 @@ components:
         message:
           type: string
           enum:
-            - The server was unable to process the request because it contains invalid data
+            - >-
+              The server was unable to process the request because it contains
+              invalid data
           nullable: false
       type: object
       additionalProperties: false
@@ -2321,7 +2334,7 @@ components:
       name: Authorization
       in: header
 info:
-  title: "Constantinople B2C API"
+  title: Constantinople B2C API
   version: 1.0.0
 openapi: 3.0.0
 paths:
@@ -2329,37 +2342,37 @@ paths:
     post:
       operationId: CreateIndividualBankingEntity
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BankingEntityResponse"
+                $ref: '#/components/schemas/BankingEntityResponse'
               examples:
                 Example 1:
                   value:
-                    bankingEntityId: "12345"
-                    creatorId: "67890"
+                    bankingEntityId: '12345'
+                    creatorId: '67890'
                     status: ACTIVE
-                    f1EntityId: "54321"
+                    f1EntityId: '54321'
                     type: BUSINESS
                     nickname: Example Business
                     businessDetails:
                       registeredName: Connect Bookkeeping Pty Ltd
                       businessNames:
                         - Connect Bookkeeping
-                      abn: "12345678901"
-                      acn: "0987654321"
-                      arbn: "1122334455"
+                      abn: '12345678901'
+                      acn: '0987654321'
+                      arbn: '1122334455'
                       type: PTY LTD
                       placeOfBusiness:
                         dpid: dpid
                         country: Australia
                         fullAddress: 123 Business St, Business City, BC 1234
-                        postalCode: "1234"
+                        postalCode: '1234'
                         state: BC
                         streetName: Business St
-                        streetNumber: "123"
+                        streetNumber: '123'
                         streetType: St
                         suburb: Business City
                         type: Office
@@ -2368,21 +2381,21 @@ paths:
                         country: Australia
                         dpid: dpid
                         fullAddress: 123 Office St, Office City, OC 5678
-                        postalCode: "5678"
+                        postalCode: '5678'
                         state: OC
                         streetName: Office St
-                        streetNumber: "123"
+                        streetNumber: '123'
                         streetType: St
                         suburb: Office City
                         type: Office
                         unitNumber: 2B
-                      registeredDate: 2023-01-01
+                      registeredDate: '2023-01-01'
                       emailAddress: contact@connectbookkeeping.com
-                      phoneNumber: "+61123456789"
+                      phoneNumber: '+61123456789'
                     activeComplianceApplication:
-                      complianceApplicationId: "98765"
-                      bankingEntityId: "12345"
-                      creatorId: "67890"
+                      complianceApplicationId: '98765'
+                      bankingEntityId: '12345'
+                      creatorId: '67890'
                       purpose: ORIGINATION
                       status: IN_PROGRESS
                       outcome: PENDING
@@ -2392,18 +2405,18 @@ paths:
                           condition: ALL
                           candidates:
                             - verified: true
-                              kycApplicationId: "11111"
+                              kycApplicationId: '11111'
                               deepLinkUrl: https://example.com/kyc/11111
                               primaryApplicantCandidate: true
                             - verified: false
-                              kycApplicationId: "22222"
+                              kycApplicationId: '22222'
                               deepLinkUrl: https://example.com/kyc/22222
                         - type: KYB_REQUIREMENT
                           role: UBO
                           condition: ONE_OF
                           candidates:
                             - verified: true
-                              kybApplicationId: "33333"
+                              kybApplicationId: '33333'
                               deepLinkUrl: https://example.com/kyb/33333
       description: Create a new banking entity for an individual
       summary: Create a new banking entity for an individual
@@ -2427,37 +2440,37 @@ paths:
     post:
       operationId: CreateBusinessBankingEntity
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BankingEntityResponse"
+                $ref: '#/components/schemas/BankingEntityResponse'
               examples:
                 Example 1:
                   value:
-                    bankingEntityId: "12345"
-                    creatorId: "67890"
+                    bankingEntityId: '12345'
+                    creatorId: '67890'
                     status: ACTIVE
-                    f1EntityId: "54321"
+                    f1EntityId: '54321'
                     type: BUSINESS
                     nickname: Example Business
                     businessDetails:
                       registeredName: Connect Bookkeeping Pty Ltd
                       businessNames:
                         - Connect Bookkeeping
-                      abn: "12345678901"
-                      acn: "0987654321"
-                      arbn: "1122334455"
+                      abn: '12345678901'
+                      acn: '0987654321'
+                      arbn: '1122334455'
                       type: PTY LTD
                       placeOfBusiness:
                         dpid: dpid
                         country: Australia
                         fullAddress: 123 Business St, Business City, BC 1234
-                        postalCode: "1234"
+                        postalCode: '1234'
                         state: BC
                         streetName: Business St
-                        streetNumber: "123"
+                        streetNumber: '123'
                         streetType: St
                         suburb: Business City
                         type: Office
@@ -2466,21 +2479,21 @@ paths:
                         country: Australia
                         dpid: dpid
                         fullAddress: 123 Office St, Office City, OC 5678
-                        postalCode: "5678"
+                        postalCode: '5678'
                         state: OC
                         streetName: Office St
-                        streetNumber: "123"
+                        streetNumber: '123'
                         streetType: St
                         suburb: Office City
                         type: Office
                         unitNumber: 2B
-                      registeredDate: 2023-01-01
+                      registeredDate: '2023-01-01'
                       emailAddress: contact@connectbookkeeping.com
-                      phoneNumber: "+61123456789"
+                      phoneNumber: '+61123456789'
                     activeComplianceApplication:
-                      complianceApplicationId: "98765"
-                      bankingEntityId: "12345"
-                      creatorId: "67890"
+                      complianceApplicationId: '98765'
+                      bankingEntityId: '12345'
+                      creatorId: '67890'
                       purpose: ORIGINATION
                       status: IN_PROGRESS
                       outcome: PENDING
@@ -2490,18 +2503,18 @@ paths:
                           condition: ALL
                           candidates:
                             - verified: true
-                              kycApplicationId: "11111"
+                              kycApplicationId: '11111'
                               deepLinkUrl: https://example.com/kyc/11111
                               primaryApplicantCandidate: true
                             - verified: false
-                              kycApplicationId: "22222"
+                              kycApplicationId: '22222'
                               deepLinkUrl: https://example.com/kyc/22222
                         - type: KYB_REQUIREMENT
                           role: UBO
                           condition: ONE_OF
                           candidates:
                             - verified: true
-                              kybApplicationId: "33333"
+                              kybApplicationId: '33333'
                               deepLinkUrl: https://example.com/kyb/33333
       description: Create a new banking entity for a business
       summary: Create a new banking entity for a business
@@ -2521,41 +2534,41 @@ paths:
               required:
                 - nickname
               type: object
-  "/banking-entity/{bankingEntityId}":
+  /banking-entity/{bankingEntityId}:
     get:
       operationId: GetBankingEntity
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BankingEntityResponse"
+                $ref: '#/components/schemas/BankingEntityResponse'
               examples:
                 Example 1:
                   value:
-                    bankingEntityId: "12345"
-                    creatorId: "67890"
+                    bankingEntityId: '12345'
+                    creatorId: '67890'
                     status: ACTIVE
-                    f1EntityId: "54321"
+                    f1EntityId: '54321'
                     type: BUSINESS
                     nickname: Example Business
                     businessDetails:
                       registeredName: Connect Bookkeeping Pty Ltd
                       businessNames:
                         - Connect Bookkeeping
-                      abn: "12345678901"
-                      acn: "0987654321"
-                      arbn: "1122334455"
+                      abn: '12345678901'
+                      acn: '0987654321'
+                      arbn: '1122334455'
                       type: PTY LTD
                       placeOfBusiness:
                         dpid: dpid
                         country: Australia
                         fullAddress: 123 Business St, Business City, BC 1234
-                        postalCode: "1234"
+                        postalCode: '1234'
                         state: BC
                         streetName: Business St
-                        streetNumber: "123"
+                        streetNumber: '123'
                         streetType: St
                         suburb: Business City
                         type: Office
@@ -2564,21 +2577,21 @@ paths:
                         country: Australia
                         dpid: dpid
                         fullAddress: 123 Office St, Office City, OC 5678
-                        postalCode: "5678"
+                        postalCode: '5678'
                         state: OC
                         streetName: Office St
-                        streetNumber: "123"
+                        streetNumber: '123'
                         streetType: St
                         suburb: Office City
                         type: Office
                         unitNumber: 2B
-                      registeredDate: 2023-01-01
+                      registeredDate: '2023-01-01'
                       emailAddress: contact@connectbookkeeping.com
-                      phoneNumber: "+61123456789"
+                      phoneNumber: '+61123456789'
                     activeComplianceApplication:
-                      complianceApplicationId: "98765"
-                      bankingEntityId: "12345"
-                      creatorId: "67890"
+                      complianceApplicationId: '98765'
+                      bankingEntityId: '12345'
+                      creatorId: '67890'
                       purpose: ORIGINATION
                       status: IN_PROGRESS
                       outcome: PENDING
@@ -2588,20 +2601,22 @@ paths:
                           condition: ALL
                           candidates:
                             - verified: true
-                              kycApplicationId: "11111"
+                              kycApplicationId: '11111'
                               deepLinkUrl: https://example.com/kyc/11111
                               primaryApplicantCandidate: true
                             - verified: false
-                              kycApplicationId: "22222"
+                              kycApplicationId: '22222'
                               deepLinkUrl: https://example.com/kyc/22222
                         - type: KYB_REQUIREMENT
                           role: UBO
                           condition: ONE_OF
                           candidates:
                             - verified: true
-                              kybApplicationId: "33333"
+                              kybApplicationId: '33333'
                               deepLinkUrl: https://example.com/kyb/33333
-      description: Fetch the high level details about the banking entity and its status on the platform
+      description: >-
+        Fetch the high level details about the banking entity and its status on
+        the platform
       summary: Get banking entity details
       tags:
         - Onboarding
@@ -2616,12 +2631,12 @@ paths:
     patch:
       operationId: UpdateBankingEntity
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BankingEntityResponse"
+                $ref: '#/components/schemas/BankingEntityResponse'
       description: Update banking entity
       summary: Update banking entity
       tags:
@@ -2642,7 +2657,8 @@ paths:
             schema:
               properties:
                 fields:
-                  $ref: "#/components/schemas/Partial_BusinessIdentityPublicMutableFields_"
+                  $ref: >-
+                    #/components/schemas/Partial_BusinessIdentityPublicMutableFields_
               required:
                 - fields
               type: object
@@ -2650,7 +2666,7 @@ paths:
     post:
       operationId: PutAcknowledgementsConsents
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -2676,23 +2692,24 @@ paths:
             schema:
               properties:
                 aac:
-                  $ref: "#/components/schemas/Partial_Record_BusinessConsentType.boolean__"
+                  $ref: >-
+                    #/components/schemas/Partial_Record_BusinessConsentType.boolean__
                   description: Acknowledgement and consents
                 appVersion:
                   type: string
               required:
                 - aac
               type: object
-  "/kyb/application/{kybApplicationId}":
+  /kyb/application/{kybApplicationId}:
     get:
       operationId: GetKybApplication
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/KybApplicationB2CResponse"
+                $ref: '#/components/schemas/KybApplicationB2CResponse'
               examples:
                 Example 1:
                   value:
@@ -2704,37 +2721,37 @@ paths:
                     registeredName: ANNETTE JOY KRUGER
                     businessNames:
                       - CONNECT BOOKKEEPING
-                    abn: "11061989110"
-                    acn: ""
+                    abn: '11061989110'
+                    acn: ''
                     type: IND
                     registeredOffice:
                       country: Australia
-                      dpid: "73863596"
+                      dpid: '73863596'
                       fullAddress: 23 CLAYMORE CRES, BUNDALL QLD 4217
-                      postalCode: "4217"
+                      postalCode: '4217'
                       state: QLD
                       streetName: CLAYMORE
-                      streetNumber: "23"
+                      streetNumber: '23'
                       streetType: CRES
                       suburb: BUNDALL
                       type: PLACE_OF_BUSINESS
-                      unitNumber: ""
+                      unitNumber: ''
                     placeOfBusiness:
                       country: Australia
-                      dpid: "73863596"
+                      dpid: '73863596'
                       fullAddress: 23 CLAYMORE CRES, BUNDALL QLD 4217
-                      postalCode: "4217"
+                      postalCode: '4217'
                       state: QLD
                       streetName: CLAYMORE
-                      streetNumber: "23"
+                      streetNumber: '23'
                       streetType: CRES
                       suburb: BUNDALL
                       type: PLACE_OF_BUSINESS
-                      unitNumber: ""
+                      unitNumber: ''
                     emailAddress: annette@gmail.com
-                    phoneNumber: "0400000000"
+                    phoneNumber: '0400000000'
                     industryClass:
-                      code: "4110"
+                      code: '4110'
                       name: Supermarket and Grocery Stores
                     industryDivision:
                       code: G
@@ -2748,7 +2765,7 @@ paths:
                         id: ce8b460e-52db-4434-b843-0c1c45d3b990
                         kycApplicationId: 403295c5-f167-422a-955c-6aaa04d12d4e
                         middleName: twopass
-                        parentAbn: "11061989110"
+                        parentAbn: '11061989110'
                         roles:
                           - UBO
                         surname: Kruger
@@ -2763,9 +2780,11 @@ paths:
                     businessQueryCompleted: true
                     businessQueryTriggered: true
                     countryOfEstablishment: AUS
-                    dateCreated: 2024-04-05T05:18:54.182Z
-                    dateUpdated: 2024-04-05T05:18:54.182Z
-      description: Gets a KYB (Know Your Business) application based on the provided kybApplicationId.
+                    dateCreated: '2024-04-05T05:18:54.182Z'
+                    dateUpdated: '2024-04-05T05:18:54.182Z'
+      description: >-
+        Gets a KYB (Know Your Business) application based on the provided
+        kybApplicationId.
       summary: Get a kyb application
       tags:
         - KYB
@@ -2778,16 +2797,16 @@ paths:
           required: true
           schema:
             type: string
-  "/kyc/application/{kycApplicationId}":
+  /kyc/application/{kycApplicationId}:
     get:
       operationId: GetKycApplication
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/KycApplicationB2CResponse"
+                $ref: '#/components/schemas/KycApplicationB2CResponse'
               examples:
                 Example 1:
                   value:
@@ -2795,7 +2814,7 @@ paths:
                     businessEntityId: 0b14f520-9d98-4d9c-a621-550f2ade3fce
                     bankingEntityId: 0b14f520-9d98-4d9c-a621-550f2ade3fce
                     userId: 9f925ccb-67a1-4a6f-b085-b189d7684e85
-                    role: ""
+                    role: ''
                     givenName: Annette
                     middleName: Joy
                     surname: Kruger
@@ -2805,24 +2824,24 @@ paths:
                     address:
                       - addressId: c6ec5ece-f730-89ec-041e-ad1492dd1b49
                         country: Australia
-                        dpid: "58166290"
+                        dpid: '58166290'
                         fullAddress: 10 BLOCK RD, BALLARAT CENTRAL VIC 3350
-                        postalCode: "3350"
+                        postalCode: '3350'
                         state: VIC
                         streetName: BLOCK
-                        streetNumber: "1"
+                        streetNumber: '1'
                         streetType: ARC
                         suburb: BALLARAT CENTRAL
                         type: RESIDENTIAL1
-                        unitNumber: ""
+                        unitNumber: ''
                       - addressId: a313638a-52bb-3f10-15b3-7734a13ec0d2
                         country: AUS
-                        dpid: "00000000"
+                        dpid: '00000000'
                         fullAddress: 19 CLAYMORE PDE, BUNDALL Queensland 4217, Australia
-                        postalCode: "4217"
+                        postalCode: '4217'
                         state: QLD
                         streetName: CLAYMORE
-                        streetNumber: "23"
+                        streetNumber: '23'
                         streetType: CRESCENT
                         suburb: BUNDALL
                         type: POSTAL
@@ -2831,14 +2850,14 @@ paths:
                     numberOfFailures: 0
                     maximumRetries: 5
                     occupation:
-                      anzscoCode: "261314"
+                      anzscoCode: '261314'
                       name: Software Tester
                     inviteId: 07a83c77-47bd-4a00-ba5d-9defa5c2e1f7
                     australianTaxResident: true
                     emailAddress: annette@gmail.com
-                    mobileNumber: "0400000000"
-                    dateCreated: 2024-04-05T05:18:54.182Z
-                    dateUpdated: 2024-04-05T05:18:54.182Z
+                    mobileNumber: '0400000000'
+                    dateCreated: '2024-04-05T05:18:54.182Z'
+                    dateUpdated: '2024-04-05T05:18:54.182Z'
       summary: Get a kyc application
       tags:
         - KYC
@@ -2851,12 +2870,12 @@ paths:
           required: true
           schema:
             type: string
-  "/mfa/start/{scope}":
+  /mfa/start/{scope}:
     post:
       operationId: StartMfa
       responses:
-        "200":
-          description: ""
+        '200':
+          description: ''
           content:
             application/json:
               schema:
@@ -2872,9 +2891,12 @@ paths:
                   - statusCode
                   - challengeId
                 type: object
-      description: |-
+      description: >-
         Used for step up authentication to initiate the flow
-        You get back a challengeId that is then passed alongside the received code to the endpoint requiring MFA
+
+        You get back a challengeId that is then passed alongside the received
+        code to the endpoint requiring MFA
+
         Currently SMS is the only channel supported
       summary: Start an MFA request
       tags:
@@ -2886,12 +2908,12 @@ paths:
           name: scope
           required: true
           schema:
-            $ref: "#/components/schemas/MFAScope"
+            $ref: '#/components/schemas/MFAScope'
   /mfa/mfa/verify:
     post:
       operationId: VerifyMfa
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -2902,13 +2924,15 @@ paths:
                 required:
                   - accessToken
                 type: object
-        "401":
+        '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorMessage"
-      description: Verify the mfa challenge and allow to get an elevated access token if successful
+                $ref: '#/components/schemas/ErrorMessage'
+      description: >-
+        Verify the mfa challenge and allow to get an elevated access token if
+        successful
       summary: Verify mfa
       tags:
         - MFA
@@ -2932,7 +2956,7 @@ paths:
     post:
       operationId: FindAddress
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -2948,12 +2972,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AddressRestFindRequest"
+              $ref: '#/components/schemas/AddressRestFindRequest'
   /onboarding/address/retrieve:
     post:
       operationId: RetrieveAddress
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -2969,12 +2993,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AddressRestRetrieveRequest"
+              $ref: '#/components/schemas/AddressRestRetrieveRequest'
   /onboarding/business/lookup:
     post:
       operationId: LookupBusiness
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -2982,7 +3006,7 @@ paths:
                 properties:
                   response:
                     items:
-                      $ref: "#/components/schemas/F1LookUpReport"
+                      $ref: '#/components/schemas/F1LookUpReport'
                     type: array
                   registered:
                     type: boolean
@@ -3007,11 +3031,11 @@ paths:
               required:
                 - search
               type: object
-  "/onboarding/business/abn/{abn}/checks":
+  /onboarding/business/abn/{abn}/checks:
     get:
       operationId: AbnCheck
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -3036,8 +3060,10 @@ paths:
                   - checkResults
                   - outcome
                 type: object
-      description: |-
-        Performs some check on the provided ABN to determine if if already present on the platform
+      description: >-
+        Performs some check on the provided ABN to determine if if already
+        present on the platform
+
         or if the platform supports the type of business for this ABN
       summary: Check ABN validity
       tags:
@@ -3054,12 +3080,12 @@ paths:
     get:
       operationId: GetOccupations
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OnboardingRefDataOccupationB2CResponse"
+                $ref: '#/components/schemas/OnboardingRefDataOccupationB2CResponse'
       summary: Get occupation ref data
       tags:
         - Onboarding Reference Data
@@ -3080,12 +3106,12 @@ paths:
     get:
       operationId: GetIndustries
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OnboardingRefDataIndustryB2CResponse"
+                $ref: '#/components/schemas/OnboardingRefDataIndustryB2CResponse'
       summary: Get anzsic industry ref data
       tags:
         - Onboarding Reference Data
@@ -3096,12 +3122,12 @@ paths:
     get:
       operationId: GetSourceOfFunds
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OnboardingRefDataSourceOfFundB2CResponse"
+                $ref: '#/components/schemas/OnboardingRefDataSourceOfFundB2CResponse'
       summary: Get source of fund ref data
       tags:
         - Onboarding Reference Data
@@ -3112,12 +3138,13 @@ paths:
     get:
       operationId: GetPurposeOfAccounts
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OnboardingRefDataPurposeOfAccountB2CResponse"
+                $ref: >-
+                  #/components/schemas/OnboardingRefDataPurposeOfAccountB2CResponse
       summary: Get purpose of account ref data
       tags:
         - Onboarding Reference Data
@@ -3128,7 +3155,7 @@ paths:
     post:
       operationId: CreateUserConsents
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -3139,12 +3166,12 @@ paths:
                 required:
                   - success
                 type: object
-        "400":
+        '400':
           description: Invalid payload.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorMessage"
+                $ref: '#/components/schemas/ErrorMessage'
       description: Register consents or acknowledgement for a user.
       summary: Register consents for a user
       tags:
@@ -3159,10 +3186,11 @@ paths:
             schema:
               properties:
                 aac:
-                  $ref: "#/components/schemas/Partial_Record_UserConsentType.boolean__"
+                  $ref: >-
+                    #/components/schemas/Partial_Record_UserConsentType.boolean__
                   description: The consents or acknowledgements to be registered
                 appVersion:
-                  $ref: "#/components/schemas/UUID"
+                  $ref: '#/components/schemas/UUID'
                   description: Version of the application
                   example:
                     - d47c7579c89c66d32572e6ac3bda2f290976ef53
@@ -3173,16 +3201,16 @@ paths:
     get:
       operationId: GetSummary
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
                 properties:
                   entities:
-                    $ref: "#/components/schemas/Record_string.PublicUserEntityMap_"
+                    $ref: '#/components/schemas/Record_string.PublicUserEntityMap_'
                   user:
-                    $ref: "#/components/schemas/PublicOwnUser"
+                    $ref: '#/components/schemas/PublicOwnUser'
                 required:
                   - entities
                   - user
@@ -3198,7 +3226,7 @@ paths:
     patch:
       operationId: UpdatePersonalInfo
       responses:
-        "204":
+        '204':
           description: No content
       description: |-
         Update current user personal information
@@ -3225,13 +3253,13 @@ paths:
                   type: string
                   description: The last name of the user
                 mailingAddress:
-                  $ref: "#/components/schemas/Address"
+                  $ref: '#/components/schemas/Address'
                   description: The mailing address of the user
                 residentialAddress:
-                  $ref: "#/components/schemas/Address"
+                  $ref: '#/components/schemas/Address'
                   description: The residential address of the user
                 notifications:
-                  $ref: "#/components/schemas/MarketingOptionRequest"
+                  $ref: '#/components/schemas/MarketingOptionRequest'
                   description: The marketing options for the user
                 mfaCode:
                   type: string
@@ -3246,12 +3274,12 @@ paths:
     patch:
       operationId: UpdateAttr
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CodeDeliveryDetailsType"
+                $ref: '#/components/schemas/CodeDeliveryDetailsType'
       description: |-
         Initiate the update of a user's email or mobile number. 
         Returns an mfa code that must be used to confirm the change.
@@ -3273,7 +3301,7 @@ paths:
             schema:
               properties:
                 name:
-                  $ref: "#/components/schemas/CognitoAttributesType"
+                  $ref: '#/components/schemas/CognitoAttributesType'
                   description: The name of the attribute to be updated
                 value:
                   type: string
@@ -3286,7 +3314,7 @@ paths:
     patch:
       operationId: ConfirmAttr
       responses:
-        "204":
+        '204':
           description: No content
       description: Confirm a user's email or mobile number update.
       summary: Confirm a user's email or mobile number update
@@ -3307,7 +3335,7 @@ paths:
             schema:
               properties:
                 name:
-                  $ref: "#/components/schemas/CognitoAttributesType"
+                  $ref: '#/components/schemas/CognitoAttributesType'
                   description: The name of the attribute to be confirmed
                 code:
                   type: string
@@ -3323,7 +3351,7 @@ paths:
     patch:
       operationId: UpdateNotificationSettings
       responses:
-        "204":
+        '204':
           description: No content
       description: Update current user notifications settings
       summary: Update current user notifications settings
@@ -3337,25 +3365,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReturnType_typeofmarketingOptionPatchValidator.parse_"
+              $ref: >-
+                #/components/schemas/ReturnType_typeofmarketingOptionPatchValidator.parse_
   /v2/accounts:
     get:
       operationId: GetAccountsV2
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AllAccountsV2"
+                $ref: '#/components/schemas/AllAccountsV2'
               examples:
                 Example 1:
                   value:
                     accounts:
                       - accountState: ACTIVE
                         accountId: 6de193cf-048d-41bf-bbba-d9da23736245
-                        accountNumber: "342176872"
-                        bsb: "834696"
+                        accountNumber: '342176872'
+                        bsb: '834696'
                         balances:
                           booked:
                             value: 100000
@@ -3368,12 +3397,12 @@ paths:
                         entityAccountId: 2f959315-541b-4a98-86ec-77fa0ed21cbf
                         nickname: TXN Accounts - Pilot
                         productId: b7b6753c-cf27-46da-9c3e-2397f17406ab
-                        productVersion: "1"
+                        productVersion: '1'
                         productGroup: CURRENT
                       - accountState: ACTIVE
                         accountId: 7de193cf-048d-41bf-bbba-d9da23736246
-                        accountNumber: "342176873"
-                        bsb: "834696"
+                        accountNumber: '342176873'
+                        bsb: '834696'
                         balances:
                           booked:
                             value: 100000
@@ -3386,12 +3415,12 @@ paths:
                         entityAccountId: 2f959315-541b-4a98-86ec-77fa0ed21cbf
                         nickname: Hard Earned Savings
                         productId: cef1a458-471e-432e-af99-6ceb8bbb75d3
-                        productVersion: "1"
+                        productVersion: '1'
                         productGroup: SAVINGS
                       - accountState: ACTIVE
                         accountId: 7de193cf-048d-41bf-bbba-d9da21234567
-                        accountNumber: "12345678"
-                        bsb: "834696"
+                        accountNumber: '12345678'
+                        bsb: '834696'
                         balances:
                           booked:
                             value: 100000
@@ -3404,16 +3433,16 @@ paths:
                         entityAccountId: 2f959315-541b-4a98-86ec-77fa0ed21cbf
                         nickname: For a Rainy Day
                         productId: cef1a458-471e-432e-af99-6ceb8bbb75d3
-                        productVersion: "1"
+                        productVersion: '1'
                         productGroup: SAVINGS
-        "500":
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_InternalServerError_"
+                $ref: '#/components/schemas/BasicErrorResponse_InternalServerError_'
       description: |-
-        
+
         Get all accounts associated with a business
       summary: Get All Accounts
       tags:
@@ -3425,7 +3454,7 @@ paths:
     post:
       operationId: CreateSubscriptionV2
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -3449,27 +3478,27 @@ paths:
                 Example 1:
                   value:
                     nickname: TXN Accounts - Pilot
-                    bsb: "834696"
-                    accountNumber: "842491705"
+                    bsb: '834696'
+                    accountNumber: '842491705'
                     accountId: 91233c30-1501-40e5-ba58-b3dcc73fe940
-        "404":
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_Productnotfound_"
-        "422":
+                $ref: '#/components/schemas/BasicErrorResponse_Productnotfound_'
+        '422':
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_Validationerroronbody_"
-        "500":
+                $ref: '#/components/schemas/BasicErrorResponse_Validationerroronbody_'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_InternalServerError_"
+                $ref: '#/components/schemas/BasicErrorResponse_InternalServerError_'
       description: Create Account
       summary: Create Account
       tags:
@@ -3493,23 +3522,23 @@ paths:
                 - productVersion
                 - productId
               type: object
-  "/v2/accounts/{id}":
+  /v2/accounts/{id}:
     get:
       operationId: GetAccountV2
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AccountV2"
+                $ref: '#/components/schemas/AccountV2'
               examples:
                 Example 1:
                   value:
                     accountState: ACTIVE
                     accountId: 6de193cf-048d-41bf-bbba-d9da23736245
-                    accountNumber: "342176872"
-                    bsb: "834696"
+                    accountNumber: '342176872'
+                    bsb: '834696'
                     balances:
                       booked:
                         value: 100000
@@ -3522,32 +3551,34 @@ paths:
                     entityAccountId: 2f959315-541b-4a98-86ec-77fa0ed21cbf
                     nickname: TXN Accounts - Pilot
                     productId: b7b6753c-cf27-46da-9c3e-2397f17406ab
-                    productVersion: "1"
+                    productVersion: '1'
                     productGroup: CURRENT
-        "403":
+        '403':
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_InvalidAccount_"
-        "404":
+                $ref: '#/components/schemas/BasicErrorResponse_InvalidAccount_'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_Theserverhasnotfoundanythingmatchingtheaccountid_"
-        "422":
+                $ref: >-
+                  #/components/schemas/BasicErrorResponse_Theserverhasnotfoundanythingmatchingtheaccountid_
+        '422':
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_Validationerror-Invaliduuid_"
-        "500":
+                $ref: >-
+                  #/components/schemas/BasicErrorResponse_Validationerror-Invaliduuid_
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_InternalServerError_"
+                $ref: '#/components/schemas/BasicErrorResponse_InternalServerError_'
       description: Get account by id
       summary: Get Account by ID
       tags:
@@ -3561,36 +3592,38 @@ paths:
           required: true
           schema:
             type: string
-  "/v2/accounts/{id}/name":
+  /v2/accounts/{id}/name:
     patch:
       operationId: UpdateNicknameV2
       responses:
-        "204":
+        '204':
           description: No Content
-        "403":
+        '403':
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_InvalidAccount_"
-        "409":
+                $ref: '#/components/schemas/BasicErrorResponse_InvalidAccount_'
+        '409':
           description: Conflict
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_Businessalreadyhasanaccountwithsamenickname_"
-        "422":
+                $ref: >-
+                  #/components/schemas/BasicErrorResponse_Businessalreadyhasanaccountwithsamenickname_
+        '422':
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_Validationerror-Invaliduuid_"
-        "500":
+                $ref: >-
+                  #/components/schemas/BasicErrorResponse_Validationerror-Invaliduuid_
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_InternalServerError_"
+                $ref: '#/components/schemas/BasicErrorResponse_InternalServerError_'
       description: Update the nickname of a bank account
       summary: Update Account Nickname
       tags:
@@ -3615,36 +3648,43 @@ paths:
               required:
                 - nickname
               type: object
-  "/v2/products/summary/{id}/version/{version}":
+  /v2/products/summary/{id}/version/{version}:
     get:
       operationId: GetProductVersionSummaryV2
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProductV2"
+                $ref: '#/components/schemas/ProductV2'
               examples:
                 Example 1:
                   value:
                     productId: b7b6753c-cf27-46da-9c3e-2397f17406ab
                     productGroup: CURRENT
-                    productDescription: Basic transaction account being offered to customers for Pilot.
+                    productDescription: >-
+                      Basic transaction account being offered to customers for
+                      Pilot.
                     productName: TXN Accounts
                     version: 1
                     documents:
-                      - description: All content for user to see on product summary screen goes here
+                      - description: >-
+                          All content for user to see on product summary screen
+                          goes here
                         name: Product Summary
-                        version: "1"
+                        version: '1'
                         files:
-                          - url: https://client.env.cxnpl.io.cdn/files/products/TRANSACTION_PRODUCT_ID/v3/app_product_summary.md
+                          - url: >-
+                              https://client.env.cxnpl.io.cdn/files/products/TRANSACTION_PRODUCT_ID/v3/app_product_summary.md
                             format: OTHER
                             label: app_product_summary
-                          - url: https:/client.env.cxnpl.io.cdn/files/products/SAVINGS_PRODUCT_ID/v3/Target%2BMarket%2BDetermination_Transaction%2BAccount_v0.1.pdf
+                          - url: >-
+                              https:/client.env.cxnpl.io.cdn/files/products/SAVINGS_PRODUCT_ID/v3/Target%2BMarket%2BDetermination_Transaction%2BAccount_v0.1.pdf
                             format: PDF
                             label: Target Market Determination
-                          - url: https://client.env.cxnpl.io.cdn/files/products/SAVINGS_PRODUCT_ID/v3/Terms%2BAnd%2BConditions_Transaction%2BAccount_v0.1.pdf
+                          - url: >-
+                              https://client.env.cxnpl.io.cdn/files/products/SAVINGS_PRODUCT_ID/v3/Terms%2BAnd%2BConditions_Transaction%2BAccount_v0.1.pdf
                             format: PDF
                             label: Terms and Conditions
                         publishedDate: 2022-09-05T01:13:55.092+0000
@@ -3658,30 +3698,31 @@ paths:
                         defaultCard: true
                         frontTemplateImage:
                           url: https://iili.io/60Qmbt.png
-        "401":
+        '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_TokenExpired_"
-        "404":
+                $ref: '#/components/schemas/BasicErrorResponse_TokenExpired_'
+        '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_Theserverhasnotfoundanythingmatchingtheproductkey_"
-        "422":
+                $ref: >-
+                  #/components/schemas/BasicErrorResponse_Theserverhasnotfoundanythingmatchingtheproductkey_
+        '422':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_ValidationerroronPath_"
-        "500":
+                $ref: '#/components/schemas/BasicErrorResponse_ValidationerroronPath_'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_InternalServerError_"
+                $ref: '#/components/schemas/BasicErrorResponse_InternalServerError_'
       description: Retrieve the product summary by product id and version
       summary: Get Product Summary
       tags:
@@ -3705,7 +3746,7 @@ paths:
     get:
       operationId: GetAvailableProductsV2
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -3713,7 +3754,7 @@ paths:
                 properties:
                   products:
                     items:
-                      $ref: "#/components/schemas/ProductV2"
+                      $ref: '#/components/schemas/ProductV2'
                     type: array
                 required:
                   - products
@@ -3724,21 +3765,28 @@ paths:
                     products:
                       - productId: b7b6753c-cf27-46da-9c3e-2397f17406ab
                         productGroup: CURRENT
-                        productDescription: Basic transaction account being offered to customers for Pilot.
+                        productDescription: >-
+                          Basic transaction account being offered to customers
+                          for Pilot.
                         productName: TXN Accounts
                         version: 1
                         documents:
-                          - description: All content for user to see on product summary screen goes here
+                          - description: >-
+                              All content for user to see on product summary
+                              screen goes here
                             name: Product Summary
-                            version: "1"
+                            version: '1'
                             files:
-                              - url: https://client.env.cxnpl.io.cdn/files/products/TRANSACTION_PRODUCT_ID/v3/app_product_summary.md
+                              - url: >-
+                                  https://client.env.cxnpl.io.cdn/files/products/TRANSACTION_PRODUCT_ID/v3/app_product_summary.md
                                 format: OTHER
                                 label: app_product_summary
-                              - url: https:/client.env.cxnpl.io.cdn/files/products/SAVINGS_PRODUCT_ID/v3/Target%2BMarket%2BDetermination_Transaction%2BAccount_v0.1.pdf
+                              - url: >-
+                                  https:/client.env.cxnpl.io.cdn/files/products/SAVINGS_PRODUCT_ID/v3/Target%2BMarket%2BDetermination_Transaction%2BAccount_v0.1.pdf
                                 format: PDF
                                 label: Target Market Determination
-                              - url: https://client.env.cxnpl.io.cdn/files/products/SAVINGS_PRODUCT_ID/v3/Terms%2BAnd%2BConditions_Transaction%2BAccount_v0.1.pdf
+                              - url: >-
+                                  https://client.env.cxnpl.io.cdn/files/products/SAVINGS_PRODUCT_ID/v3/Terms%2BAnd%2BConditions_Transaction%2BAccount_v0.1.pdf
                                 format: PDF
                                 label: Terms and Conditions
                             publishedDate: 2022-09-05T01:13:55.092+0000
@@ -3754,13 +3802,17 @@ paths:
                               url: https://iili.io/60Qmbt.png
                       - productId: b7b6753c-cf27-46da-9c3e-2397f17406ab
                         productGroup: SAVINGS
-                        productDescription: Basic savings account being offered to customers for Pilot.
+                        productDescription: >-
+                          Basic savings account being offered to customers for
+                          Pilot.
                         productName: SAVINGS Accounts
                         version: 1
                         documents:
-                          - description: All content for user to see on product summary screen goes here
+                          - description: >-
+                              All content for user to see on product summary
+                              screen goes here
                             name: Product Summary
-                            version: "0.2"
+                            version: '0.2'
                             files:
                               - format: OTHER
                                 label: app_product_summary
@@ -3772,24 +3824,25 @@ paths:
                         currency:
                           currencyCode: AUD
                         cards: []
-        "403":
+        '403':
           description: Token Expired
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_TokenInvalid_"
-        "422":
+                $ref: '#/components/schemas/BasicErrorResponse_TokenInvalid_'
+        '422':
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_Theserverwasunabletoprocesstherequestbecauseitcontainsinvaliddata_"
-        "500":
+                $ref: >-
+                  #/components/schemas/BasicErrorResponse_Theserverwasunabletoprocesstherequestbecauseitcontainsinvaliddata_
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BasicErrorResponse_InternalServerError_"
+                $ref: '#/components/schemas/BasicErrorResponse_InternalServerError_'
       description: Retrieve all available products
       summary: Get Available Products
       tags:
